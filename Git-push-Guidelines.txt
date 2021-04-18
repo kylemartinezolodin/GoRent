@@ -1,0 +1,61 @@
+0. TO MINIMIZE CONFLICTS, FINISH READING 1 - 9, then REFER to the EXAMPLE
+
+1. Plan a structured commit timeline of features to implement (You should have knowledge of how to implement to be able to do this, if you dont then research)
+
+2. Whenever commiting make sure you dont commiting in bulk, as much as possible segregate commits from Added changes, removed changes, updated changes
+Bad: 
+   Commit x: UI functionA got added
+   Commit x+1: UI functionA updated
+   Commit x+2: UI functionB got added
+   Commit x+3: UI functionC got added
+   Commit x+4: UI functionB updated, UI functionA removed
+   Commit x+5: UI functionC updated
+   ...
+Good: 
+   Commit x: UI functionA got added
+   Commit x+1: UI functionB got added
+   Commit x+2: UI functionC got added
+   Commit x+3: UI functionA updated
+   Commit x+4: UI functionB updated
+   Commit x+5: UI functionC updated
+   Commit x+6: UI functionA removed
+   ...
+
+3. Commit the ~25 minutes of progress, the the more frequent the commit the better
+
+4. Include in commit closely related changes, such as neccesary lines, vital helper functions, some deleted stuff that causes conflict, this rule will naturally break rule 2 & 3(Grouping commits) but as much as possible dont bulk commit 
+
+5. Focus on one goal, if satisfied target another goal (Definition of satisfied is when certain implementation is behaving as expected that you can now focus to next implementation or satified as in it has met the bare-minimum specified requirements)
+Bad: 
+   Commit x: UI related
+   Commit x+1: Text-to-speech related
+   Commit x+2: UI related
+   ...
+Good: 
+   Commit x: UI related
+   Commit x+1: UI related
+   Commit x+2: UI related, I'm satisfied...
+   Commit x+3: Text-to-speech related
+   ...
+
+6. If an urgent/do-now! implementation is needed while currently working on an implemtation and still not satisfied, then make the current WIP barely working, then commit, then start working with the urgent implementation (do not break rules 2, 3, 4), if statisfied and has commit, plan again your commit timeline(likely just adding the urgent implementation, and some implementation refining), then continue where you left off.
+
+7. Since commits are likely to be small, put readable (not too technical) commit message optionally put What, why, how paragraph, also before commiting always review your commits if something was included that should and shouldnt.
+
+8. push to remote after finishing a goal (i.e. intergrating a library, satifiying implementation requirements) unless required to so.
+
+9. never rewrite public history (pushed commits in remote), rule 8 give you allowance to correct your mistake.
+
+EXAMPLE:
+# Map_feature commit plan
+Commit #1: Base ui for the map feature (just enough for positioning things, some colors, etc.), likely to be multiple commits if slightly complex since it will be incremental
+Commit #2: Integrate the library needed (Three js); 1 library at a time
+Commit #3: Make the library work (use some official_test_files or basic_test_files, its just to test if is it really suitable to use), you can test each library or multiple library to test specific feature right away, likely to be multiple commits if slightly complex since it will be incremental
+Commit #4: Make the library work towards how you intend to do it, likely to be multiple commits if slightly complex since it will be incremental
+Commit #5: Focused on implentating 3D viewport, likely to be multiple commits if slightly complex since it will be incremental
+Commit #6: Focus on implentating 3D interacting Buttons, likely to be 1 commit if simple
+Commit #7: Focus on implentating 3D Assets, likely to be 1 since its just a file
+Commit #8: Focus on refining the UI, likely to be multiple commits if slightly complex since it will be incremental
+Commit #9: Focus on refinning the 3D viewport, likely to be multiple commits if slightly complex since it will be incremental
+
+NOTE: Optionally if you dont want the guideline you can read: https://medium.com/walmartglobaltech/check-out-these-5-git-tips-before-your-next-commit-c1c7a5ae34d1

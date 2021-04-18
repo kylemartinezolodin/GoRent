@@ -1,0 +1,90 @@
+.backgroundBody{
+    background-size: cover;
+	background-position: center;
+    height: 100vh;
+}
+
+.logoGoRent img{
+	float: left;
+	width: auto;
+	height: 50px;
+    margin-left: 10%;
+}
+
+.logContainerIn {
+    border-radius: 25px; 
+    border:transparent;/*set to transparent after scaling*/
+    padding: 20px;
+    width: 500px;
+    height: 400px;
+    position: absolute;
+	top: 47%;
+	left: 77%;
+	transform: translate(-50%,-50%);
+  }
+
+#roundedIP{
+    border-radius: 25px;
+    background:  #eecc76;
+    border: 2px solid #ad9258;
+    padding: 20px; 
+    width: 300px;
+    height: 15px;   
+    margin-left: 20%;
+  }
+input, label{
+    margin-bottom: 10px;
+    margin-left: 20%;
+    font-size: 20px;
+    display: block;
+    position: center;
+}
+label{
+    font-family: verdana,sans-serif;
+    color: #88c2b5;
+}
+
+button{
+    margin-top: 5%;
+    font-family: verdana,sans-serif;
+    border-radius: 25px;
+    background:  #eecc76;
+    border: 2px solid #ad9258;
+    color:#033b30;
+    padding: 15px 32px;
+    width: cover;
+    height: auto;   
+    margin-left: 40%;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+}   
+button:hover{
+    opacity: 0.8;
+}
+
+.labelText{
+    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-left: 8%;
+    font-size: 20px;
+    display: block;
+    position: center;
+}
+a{
+    color:#0bbda8;
+    font-size: 30px;
+    font-family: verdana,sans-serif;
+    margin-top: 15px;
+    margin-left:32%;
+}
+a:link {
+    color:#0bbda8;
+    background-color: transparent;
+    text-decoration: none;
+  }
+a:hover{
+    color:#033b30;
+    background-color: transparent;
+    text-decoration: underline;
+}
