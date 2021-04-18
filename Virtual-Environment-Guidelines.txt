@@ -1,0 +1,34 @@
+1.1 Create a project folder (i.e. Apollo_Airlines)
+>md Apollo_Airlines
+>cd Apollo_Airlines
+NOTE:Inside this folder is your virtual-environment folder & app/framework folder
+
+1.2 Clone the desired repository, from now on cloned directory will be called project folder
+
+2. Create create the virtual-environment folder inside the project folder
+>python -m venv [venv_folder_name]
+
+3. Initialize github in the project folder & mark venv_folder_name in gitignore 
+>git init
+>echo [venv_folder_name]/ > .gitignore
+READ MORE ABOUT .gitignore HERE:https://www.pluralsight.com/guides/how-to-use-gitignore-file
+
+4.1 Activate virtual-environment & install stuff (i.e. django) then craete requirements.txt
+>[venv_folder_name]\scripts\activate
+>pip install django
+>pip freeze > requirements.txt
+
+4.2 Activate virtual-environment & install from requirements.txt
+[venv_folder_name]\scripts\activate
+>pip install -r requirements.txt
+
+5. Create the app/framework folder (i.e. django project) in the project folder
+>django-admin startproject [project_name]
+append "_proj" to the project folder
+NOTE: The directory of project folder should look like this:
+\Apollo_Airlines\[project_name]_proj
+\Apollo_Airlines\[venv_folder_name]
+\Apollo_Airlines\.gitignore
+\Apollo_Airlines\requirements.txt
+
+IDEA FROM: https://medium.com/@jtpaasch/the-right-way-to-use-virtual-environments-1bc255a0cba7

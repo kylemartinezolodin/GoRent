@@ -1,6 +1,14 @@
+<<<<<<< HEAD
 # EXCLUDE VIRTUAL ENVIRONENT FOLDER
+=======
+#EXCLUDE VIRTUAL ENVIRONMENT FOLDER
+>>>>>>> 231197b (Users Register and login)
 venv/
 
 # FILE EXCLUSION
 *.pyc
+<<<<<<< HEAD
 #__*__.py
+=======
+#_*_.py
+>>>>>>> 231197b (Users Register and login)
