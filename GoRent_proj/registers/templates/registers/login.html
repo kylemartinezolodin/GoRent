@@ -1,0 +1,133 @@
+{% load static %}
+{% block headerinclude %}
+  <title>GoRent</title>
+  <link href="{% static 'registers/css/loginStyles.css' %}">
+  <link href="{% static 'registers/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'registers/css/gsdk-bootstrap-wizard.css' %}" rel="stylesheet">
+  <!-- styles...di mabasa idk whyyyyy.... so i put here -->
+  <style>
+  .backgroundBody{
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
+
+.logoGoRent img{
+  float: left;
+  width: auto;
+  height: 50px;
+  margin-left: 10%;
+}
+
+.logContainerIn {
+  border-radius: 25px; 
+  border:transparent;/*set to transparent after scaling*/
+  padding: 20px;
+  width: 500px;
+  height: 400px;
+  position: absolute;
+  top: 47%;
+  left: 77%;
+  transform: translate(-50%,-50%);
+  }
+
+#roundedIP{
+    border-radius: 25px;
+    background:  #eecc76;
+    border: 2px solid #ad9258;
+    padding: 20px; 
+    width: 300px;
+    height: 15px;   
+    margin-left: 20%;
+  }
+input, label{
+    margin-bottom: 10px;
+    margin-left: 20%;
+    font-size: 20px;
+    display: block;
+    position: center;
+}
+label{
+    font-family: verdana,sans-serif;
+    color: #88c2b5;
+}
+
+button{
+    margin-top: 5%;
+    font-family: verdana,sans-serif;
+    border-radius: 25px;
+    background:  #eecc76;
+    border: 2px solid #ad9258;
+    color:#033b30;
+    padding: 15px 32px;
+    width: cover;
+    height: auto;   
+    margin-left: 40%;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+}   
+button:hover{
+    opacity: 0.8;
+}
+
+.labelText{
+    margin-bottom: 10px;
+    margin-top: 20px;
+    margin-left: 8%;
+    font-size: 20px;
+    display: block;
+    position: center;
+}
+a{
+    color:#0bbda8;
+    font-size: 30px;
+    font-family: verdana,sans-serif;
+    margin-top: 15px;
+    margin-left:32%;
+}
+a:link {
+    color:#0bbda8;
+    background-color: transparent;
+    text-decoration: none;
+  }
+a:hover{
+    color:#033b30;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+
+  </style>
+{% endblock headerinclude %}
+
+<div class="backgroundBody" style="background-image: url({% static 'registers/img/LogINBG.png' %});"> <!-- used to be <body> -->
+
+   <div class="logoGoRent">
+            <img src="{% static 'registers/img/logoBtn.png' %}">
+      </div>
+
+  <form class="" id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="logContainerIn"> <!--container class-->
+
+        <label for="username">Email or Phone Number</label> <!--username-->
+            <input type="text" id="roundedIP" name="username">
+
+        <label for="password">Password</label><!--password-->
+            <input type="password" id="roundedIP" name="password">
+
+
+        <button type="submit" name="btnLogin">Log in</button> <!--submit button-->
+
+       <div class="labelText">
+           <label>Don't have an account yet?</label>
+           <a href="#">REGISTER</a>
+       </div>
+
+    </div>
+  </form>
+
+</div>
+
+

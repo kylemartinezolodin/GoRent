@@ -1,1 +1,6 @@
+#EXCLUDE VIRTUAL ENVIRONMENT FOLDER
 venv/
+
+# FILE EXCLUSION
+*.pyc
+#_*_.py
