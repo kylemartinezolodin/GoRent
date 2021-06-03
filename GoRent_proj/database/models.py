@@ -7,7 +7,7 @@ class PhoneNumber(models.Model):
     phone_number = models.CharField(validators=[phone_regex], max_length=13, blank=True) # validators should be a list
 
 class RentOwner(models.Model):
-    email = models.CharField(primary_key=True)
+    email = models.EmailField(primary_key=True, max_length=254)
     password = models.CharField(max_length = 100)
     firstname = models.CharField(max_length = 50)
     lastname = models.CharField(max_length = 50)
@@ -25,7 +25,7 @@ class Space(models.Model):
     coordinates = models.CharField(max_length = 10)
     owner = models.ForeignKey(db_column = 'owner', to = 'database.RentOwner', on_delete = models.SET_NULL, null = True)
     address = models.CharField(max_length = 100)
-    price = models.DecimalField(null = True)
+    price = models.DecimalField(null = True, max_digits=None, decimal_places=None)
 
     class Meta:
         db_table = "Spaces"
@@ -49,7 +49,7 @@ class SpaceImage(models.Model):
 
 
 class Sharee(models.Model):
-    email = models.CharField(primary_key=True)
+    email = models.EmailField(primary_key=True, max_length=254)
     password = models.CharField(max_length = 100)
     firstname = models.CharField(max_length = 50)
     lastname = models.CharField(max_length = 50)
