@@ -123,39 +123,40 @@ input.invalid {
             
         <div class="logContainer"> <!--container class-->
 
-            <form id="form1" action="">
+            <form id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data">
 
                 {% csrf_token %}
+                <!-- 1st step -->
                 <div class="tab">
                 <label for="firstName">First Name</label> <!--username-->
-                <input type="text" id="roundedIP" name="FirstName">
+                <input type="text" id="roundedIP" name="shareeFirstName">
             
                 
                 <label for="lastName">Last Name</label> <!--Last name-->
-                <input type="text" id="roundedIP" name="LastName">
+                <input type="text" id="roundedIP" name="shareeLastName">
                 
                 
                 <label for="Email">Email</label> <!--email-->
-                <input type="text" id="roundedIP" name="Email">
+                <input type="text" id="roundedIP" name="shareeEmail">
                
                 
                 <label for="password">Password</label> <!--password-->
-                <input type="password" id="roundedIP" name="password">
+                <input type="password" id="roundedIP" name="shareePassword">
                 
                 </div>
-                
+
                 <!-- 2nd step -->
                 <div class="tab">
                 
                 <label for="mobileNumber">Mobile Number</label> <!--mobile number-->
-                <input type="text" id="roundedIP" name="mobilenumber">
+                <input type="text" id="roundedIP" name="shareeMobileNumber">
                 
                
                 <label for="Birthdate">Birthdate</label> <!--Birthdate-->
-                <input type="date" id="roundedIP" name="Birthdate">
+                <input type="date" id="roundedIP" name="shareeBirthdate">
 
                 <label for="Occupation">Occupation</label> <!--Occupation-->
-                <input type="text" id="roundedIP" name="Occupation">
+                <input type="text" id="roundedIP" name="shareeOccupation">
                 </div>
 
                   <div style="overflow:auto;">
