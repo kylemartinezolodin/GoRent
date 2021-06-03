@@ -1,10 +1,4 @@
 from django.db import models
-from django.core.validators import RegexValidator
-
-# FROM: https://stackoverflow.com/questions/19130942/whats-the-best-way-to-store-phone-number-in-django-models
-class PhoneNumber(models.Model):
-    phone_regex = RegexValidator(regex=r'^(09|\+639)\d{9}$', message="Phone number must be entered in the format: '+639xxxxxxxxx'or '09xxxxxxxxx'. Up to 13 digits allowed.")
-    phone_number = models.CharField(validators=[phone_regex], max_length=13, blank=True) # validators should be a list
 
 class RentOwner(models.Model):
     email = models.EmailField(primary_key=True, max_length=254)
@@ -12,7 +6,7 @@ class RentOwner(models.Model):
     firstname = models.CharField(max_length = 50)
     lastname = models.CharField(max_length = 50)
     birthday = models.DateField()
-    contactnumber = models.ForeignKey(db_column = 'phonenumber', to = 'database.PhoneNumber', on_delete = models.SET_NULL, null = True) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
+    contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
 
     class Meta:
         db_table = "RentOwner"
@@ -25,7 +19,7 @@ class Space(models.Model):
     coordinates = models.CharField(max_length = 10)
     owner = models.ForeignKey(db_column = 'owner', to = 'database.RentOwner', on_delete = models.SET_NULL, null = True)
     address = models.CharField(max_length = 100)
-    price = models.DecimalField(null = True, max_digits=None, decimal_places=None)
+    price = models.DecimalField(null = True, max_digits = 6, decimal_places = 2)
 
     class Meta:
         db_table = "Spaces"
@@ -54,7 +48,7 @@ class Sharee(models.Model):
     firstname = models.CharField(max_length = 50)
     lastname = models.CharField(max_length = 50)
     birthday = models.DateField()
-    contactnumber = models.ForeignKey(db_column = 'phonenumber', to = 'database.PhoneNumber', on_delete = models.SET_NULL, null = True) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
+    contactnumber = models.CharField(max_length = 13)  # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
 
     class Meta:
         db_table = "Sharee"
