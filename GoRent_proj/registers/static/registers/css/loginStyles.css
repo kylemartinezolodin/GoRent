@@ -5,15 +5,12 @@
 }
 
 .logoGoRent img{
-	float: left;
-	width: auto;
-	height: 50px;
-    margin-left: 10%;
+	
 }
 
 .logContainerIn {
     border-radius: 25px; 
-    border:transparent;/*set to transparent after scaling*/
+    border:limegreen;/*set to transparent after scaling*/
     padding: 20px;
     width: 500px;
     height: 400px;

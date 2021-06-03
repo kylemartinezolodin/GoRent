@@ -7,12 +7,37 @@ from .models import *
 	
 # Create your views here.
 
-class GoRentLoginPage(View):
+class GoRentLoginOwnerPage(View):
 	def get(self, request):
-		return render(request, 'registers/login.html')
+		return render(request, 'registers/loginOwner.html')
+	def post(self, request):
+		if request.method == 'POST':
+			if 'btnLoginOwner' in request.POST:
+				username = request.POST.get("username")
+				password = request.POST.get("password")
+			return redirect('#') #put the redirecttory for the mainpage for Owners here
+
+class GoRentLoginShareePage(View):
+	def get(self, request):
+		return render(request, 'registers/loginSharee.html')
+	def post(self, request):
+		if request.method == 'POST':
+			if 'btnLoginSharee' in request.POST:
+				username = request.POST.get("username")
+				password = request.POST.get("password")
+			return redirect('#') #put the redirecttory for the mainpage for Sharee here
 
 
-class GoRentRegisterPage(View):
+class GoRentOwnerRegisterPage(View):	
 	def get(self, request):
-		return render(request, 'registers/renteeRegisterPage.html')
+		return render(request, 'registers/ownerRegisterPage.html')
+
+
+class GoRentShareeRegisterPage(View):	
+	def get(self, request):
+		return render(request, 'registers/shareeRegisterPage.html')
+
+class GoRentLandingPage(View):
+	def get(self, request):
+		return render(request, 'registers/landingPage.html')
 		
