@@ -1,7 +1,7 @@
 {% load static %}
 {% block headerinclude %}
   <title>GoRent</title>
-  <link href="{% static 'registers/css/loginStyles.css' %}">
+  <!-- <link href="{% static 'registers/css/loginStyles.css' %}"> -->
   <link href="{% static 'registers/css/bootstrap.min.css' %}" rel="stylesheet">
   <link href="{% static 'registers/css/gsdk-bootstrap-wizard.css' %}" rel="stylesheet">
   <!-- styles...di mabasa idk whyyyyy.... so i put here -->
@@ -16,12 +16,11 @@
   float: left;
   width: auto;
   height: 50px;
-  margin-left: 10%;
+  /*margin-top: 20px;*/
 }
 
 .logContainerIn {
-  border-radius: 25px; 
-  border:transparent;/*set to transparent after scaling*/
+
   padding: 20px;
   width: 500px;
   height: 400px;
@@ -101,11 +100,13 @@ a:hover{
   </style>
 {% endblock headerinclude %}
 
-<div class="backgroundBody" style="background-image: url({% static 'registers/img/LogINBG.png' %});"> <!-- used to be <body> -->
+<div class="backgroundBody" style="background-image: url({% static 'registers/img/OwnerLogIn.png' %});"> <!-- used to be <body> -->
 
    <div class="logoGoRent">
-            <img src="{% static 'registers/img/logoBtn.png' %}">
+            <img src="{% static 'registers/img/gorent_icon.png' %}" style="margin-left: 10%;">
+            <img src="{% static 'registers/img/gorent_plain.png' %}">
       </div>
+      
 
   <form class="" id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data">
       {% csrf_token %}
@@ -118,11 +119,11 @@ a:hover{
             <input type="password" id="roundedIP" name="password">
 
 
-        <button type="submit" name="btnLogin">Log in</button> <!--submit button-->
+        <button type="submit" name="btnLoginOwner">Log in</button> <!--submit button-->
 
        <div class="labelText">
-           <label>Don't have an account yet?</label>
-           <a href="#">REGISTER</a>
+           <label style="margin-left:28%">Not an Owner yet?</label>
+           <a href="{% url 'registers:gorent_OwnerRegister_view' %}">REGISTER</a>
        </div>
 
     </div>

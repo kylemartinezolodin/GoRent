@@ -1,0 +1,106 @@
+{% load static %}
+{% block headerinclude %}
+  <title>GoRent</title>
+  <!-- <link href="{% static 'registers/css/loginStyles.css' %}"> -->
+  <link href="{% static 'registers/css/bootstrap.min.css' %}" rel="stylesheet">
+  <link href="{% static 'registers/css/gsdk-bootstrap-wizard.css' %}" rel="stylesheet">
+  <!-- styles...di mabasa idk whyyyyy.... so i put here -->
+  <style>
+  .backgroundBody{
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+}
+
+.logoGoRent img{
+  float: left;
+  width: auto;
+  height: 50px;
+  /*margin-top: 20px;*/
+}
+
+
+a{
+    margin-top: 5%;
+    font-family: verdana,sans-serif;
+    border-radius: 25px;
+    background:  #c2cfa9;
+    border: 1px solid #4a5956;
+    color:#033b30;
+    padding: 15px 32px;
+    width: 50px;
+    height: auto;   
+    margin-left: 40%;
+    text-align: center;
+    text-decoration: none;
+    font-size: 20px;
+
+}
+/*a:link {
+    color:#0bbda8;
+    background-color: transparent;
+    text-decoration: none;
+  }*/
+a:hover{
+    opacity: 0.8;
+    color:#033b30;
+    text-decoration: none;
+}
+.ChoosingHover1{
+  /*padding: 20px;*/
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 90%;
+  left: 55%; /*59,68,77*/
+  transform: translate(-50%,-50%);
+}
+.ChoosingHover2{
+  /*padding: 20px;*/
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 90%;
+  left: 69%; /*59,68,77*/
+  transform: translate(-50%,-50%);
+}
+.ChoosingHover3{
+  /*padding: 20px;*/
+  width: auto;
+  height: auto;
+  position: absolute;
+  top: 90%;
+  left: 83%; /*59,68,77*/
+  transform: translate(-50%,-50%);
+}
+
+
+  </style>
+{% endblock headerinclude %}
+
+<div class="backgroundBody" style="background-image: url({% static 'registers/img/landingPageBG.png' %});"> <!-- used to be <body> -->
+
+   <div class="logoGoRent">
+            <img src="{% static 'registers/img/gorent_icon.png' %}" style="margin-left: 10%;">
+            <img src="{% static 'registers/img/gorent_plain.png' %}">
+      </div>
+      
+
+  <form class="" id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="choosingHover1">
+          <a href="{% url 'registers:gorent_loginOwner_view' %}">Owner</a>
+      </div>
+
+      <div class="choosingHover2">
+          <a href="{% url 'registers:gorent_loginSharee_view' %}">Sharee</a>
+      </div>
+
+      <div class="choosingHover3">
+          <a href="">Rentee</a> <!-- to the renting page directly? pr unsa? -->
+      </div>
+  </form>
+
+</div>
+
+
