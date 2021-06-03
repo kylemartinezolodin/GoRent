@@ -18,7 +18,7 @@ class RentOwner(models.Model):
         db_table = "RentOwner"
 
     def __str__(self):
-        return "[" +self.username +"] " +self.name +" (RentOwner)"
+        return "[" +self.email +"] " +self.lastname +" (RentOwner)"
 
 class Space(models.Model):
     id = models.AutoField(primary_key=True)
@@ -60,6 +60,6 @@ class Sharee(models.Model):
         db_table = "Sharee"
 
     def __str__(self):
-        return "[" +self.username +"] " +self.name +" (Sharee)"
+        return "[" +self.email +"] " +self.lastname +" (Sharee)"
 
 
