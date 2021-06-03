@@ -15,7 +15,11 @@ class GoRentLoginOwnerPage(View):
 			if 'btnLoginOwner' in request.POST:
 				username = request.POST.get("username")
 				password = request.POST.get("password")
-			return redirect('#') #put the redirecttory for the mainpage for Owners here
+				user_object = RentOwner.objects.filter(email = username)
+				if(user_object.count() == 1 and user_object[0].password == password):
+					return HttpResponse("Success") #PUT THE REDIRECTORY FOR THE OWNER MAINPAGE HERE
+				else:
+					return HttpResponse("Fail")
 
 class GoRentLoginShareePage(View):
 	def get(self, request):
@@ -25,39 +29,44 @@ class GoRentLoginShareePage(View):
 			if 'btnLoginSharee' in request.POST:
 				username = request.POST.get("username")
 				password = request.POST.get("password")
-			return redirect('#') #put the redirecttory for the mainpage for Sharee here
+				user_object = Sharee.objects.get(email = username)
+				if(user_object.count() == 1 and user_object[0].password == password):
+					return HttpResponse("Success") #PUT THE REDIRECTORY FOR THE SHAREE MAINPAGE HERE
+				else:
+					return HttpResponse("Fail")
+
 
 class GoRentOwnerRegisterPage(View):	
 	def get(self, request):
 		return render(request, 'registers/ownerRegisterPage.html')
 	def post (self,request):
-		ownerFirstName = request.POST.get("firstname")
-		ownerLastName = request.POST.get("lastname")
-		ownerEmail = request.POST.get("email")
-		ownerPassword = request.POST.get("password")
-		ownerMobileNumber = request.POST.get("contactnumber")
-		ownerBirthdate = request.POST.get("birthdate")
+		ownerFirstName = request.POST.get("ownerFirstName")
+		ownerLastName = request.POST.get("ownerLastName")
+		ownerEmail = request.POST.get("ownerEmail")
+		ownerPassword = request.POST.get("ownerPassword")
+		ownerMobileNumber = request.POST.get("ownerMobileNumber")
+		ownerBirthdate = request.POST.get("ownerBirthdate")
 		
-		obj = GoRentOwner(email = ownerEmail, firstname = ownerFirstName, lastname = ownerLastName, password = ownerPassword, contactnumber = ownerMobileNumber, 
-			birthdate = ownerBirthdate)
+		obj = RentOwner(email = ownerEmail, firstname = ownerFirstName, lastname = ownerLastName, password = ownerPassword, contactnumber = ownerMobileNumber, 
+			birthday = ownerBirthdate)
 		obj.save()
-		return redirect('registers: gorent_loginOwner_view')
+		return render(request, 'registers/loginOwner.html')
 
 class GoRentShareeRegisterPage(View):	
 	def get(self, request):
 		return render(request, 'registers/shareeRegisterPage.html')
 	def post (self,request):
-		shareeFirstName = request.POST.get("firstname")
-		shareeLastName = request.POST.get("lastname")
-		shareeEmail = request.POST.get("email")
-		shareePassword = request.POST.get("password")
-		shareeMobileNumber = request.POST.get("contactnumber")
-		shareeBirthdate = request.POST.get("birthdate")
+		shareeFirstName = request.POST.get("shareeFirstName")
+		shareeLastName = request.POST.get("shareeLastName")
+		shareeEmail = request.POST.get("shareeEmail")
+		shareePassword = request.POST.get("shareePassword")
+		shareeMobileNumber = request.POST.get("shareeMobileNumber")
+		shareeBirthdate = request.POST.get("shareeBirthdate")
 		
-		obj = GoRentSharee(email = shareeEmail, firstname = shareeFirstName, lastname = shareeLastName, password = shareePassword, contactnumber = shareeMobileNumber, 
-			birthdate = shareeBirthdate)
+		obj = Sharee(email = shareeEmail, firstname = shareeFirstName, lastname = shareeLastName, password = shareePassword, contactnumber = shareeMobileNumber, 
+			birthday = shareeBirthdate)
 		obj.save()
-		return redirect('registers: gorent_loginSharee_view')
+		return redirect('registers:gorent_loginSharee_view')
 
 class GoRentLandingPage(View):
 	def get(self, request):
