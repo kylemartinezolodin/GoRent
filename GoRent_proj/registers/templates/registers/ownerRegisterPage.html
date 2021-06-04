@@ -231,6 +231,14 @@ function validateForm() {
       // and set the current valid status to false:
       valid = false;
     }
+    
+    // OLODIN ANI
+    else if (y[i].name == "ownerMobileNumber"){
+      var str = y[i].value; 
+      RegEx = /^(09|\+639)\d{9}$/
+      valid = RegEx.test(str);
+      valid == false? alert("Incorrect Mobile Number Format!\nMobile Number should start with +639 or 09 followed by 9 digits"):null
+    }
   }
   // If the valid status is true, mark the step as finished and valid:
   if (valid) {

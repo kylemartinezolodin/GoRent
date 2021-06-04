@@ -9,7 +9,7 @@ from database.models import *
 
 class GoRentLoginOwnerPage(View):
 	def get(self, request):
-		return render(request, 'registers/loginOwner.html')
+		return render(request, 'registers/loginOwner.html') # THIS REFERES TO TEMPLATE PATH, FIND url.py  IF YOU WANT TO LIVE ACCESS THE PAGE 
 	def post(self, request):
 		if request.method == 'POST':
 			if 'btnLoginOwner' in request.POST:
@@ -23,7 +23,7 @@ class GoRentLoginOwnerPage(View):
 
 class GoRentLoginShareePage(View):
 	def get(self, request):
-		return render(request, 'registers/loginSharee.html')
+		return render(request, 'registers/loginSharee.html') # THIS REFERES TO TEMPLATE PATH, FIND url.py  IF YOU WANT TO LIVE ACCESS THE PAGE 
 	def post(self, request):
 		if request.method == 'POST':
 			if 'btnLoginSharee' in request.POST:
@@ -38,7 +38,7 @@ class GoRentLoginShareePage(View):
 
 class GoRentOwnerRegisterPage(View):	
 	def get(self, request):
-		return render(request, 'registers/ownerRegisterPage.html')
+		return render(request, 'registers/ownerRegisterPage.html') # THIS REFERES TO TEMPLATE PATH, FIND url.py  IF YOU WANT TO LIVE ACCESS THE PAGE 
 	def post (self,request):
 		ownerFirstName = request.POST.get("ownerFirstName")
 		ownerLastName = request.POST.get("ownerLastName")
@@ -47,14 +47,13 @@ class GoRentOwnerRegisterPage(View):
 		ownerMobileNumber = request.POST.get("ownerMobileNumber")
 		ownerBirthdate = request.POST.get("ownerBirthdate")
 		
-		obj = RentOwner(email = ownerEmail, firstname = ownerFirstName, lastname = ownerLastName, password = ownerPassword, contactnumber = ownerMobileNumber, 
-			birthday = ownerBirthdate)
+		obj = RentOwner(email = ownerEmail, firstname = ownerFirstName, lastname = ownerLastName, password = ownerPassword, contactnumber = ownerMobileNumber, birthday = ownerBirthdate)
 		obj.save()
 		return render(request, 'registers/loginOwner.html')
 
 class GoRentShareeRegisterPage(View):	
 	def get(self, request):
-		return render(request, 'registers/shareeRegisterPage.html')
+		return render(request, 'registers/shareeRegisterPage.html') # THIS REFERES TO TEMPLATE PATH, FIND url.py  IF YOU WANT TO LIVE ACCESS THE PAGE 
 	def post (self,request):
 		shareeFirstName = request.POST.get("shareeFirstName")
 		shareeLastName = request.POST.get("shareeLastName")
@@ -63,12 +62,11 @@ class GoRentShareeRegisterPage(View):
 		shareeMobileNumber = request.POST.get("shareeMobileNumber")
 		shareeBirthdate = request.POST.get("shareeBirthdate")
 		
-		obj = Sharee(email = shareeEmail, firstname = shareeFirstName, lastname = shareeLastName, password = shareePassword, contactnumber = shareeMobileNumber, 
-			birthday = shareeBirthdate)
+		obj = Sharee(email = shareeEmail, firstname = shareeFirstName, lastname = shareeLastName, password = shareePassword, contactnumber = shareeMobileNumber, birthday = shareeBirthdate)
 		obj.save()
 		return redirect('registers:gorent_loginSharee_view')
 
 class GoRentLandingPage(View):
 	def get(self, request):
-		return render(request, 'registers/landingPage.html')
+		return render(request, 'registers/landingPage.html') # THIS REFERES TO TEMPLATE PATH, FIND url.py  IF YOU WANT TO LIVE ACCESS THE PAGE 
 		
