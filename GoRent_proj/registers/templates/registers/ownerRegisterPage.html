@@ -239,6 +239,12 @@ function validateForm() {
       // and set the current valid status to false:
       valid = false;
     }
+    
+    // OLODIN ANI
+    else if (y[i].name == "ownerMobileNumber"){
+      var str = y[i].value;
+      valid = isContactValid(str)
+    }
   }
 
 
@@ -247,6 +253,13 @@ function validateForm() {
     document.getElementsByClassName("step")[currentTab].className += " finish";
   }
   return valid; // return the valid status
+}
+
+function isContactValid(str){
+  RegEx = /^(09|\+639)\d{9}$/
+  valid = RegEx.test(str);
+  valid == false? alert("Incorrect Mobile Number Format!\nMobile Number should start with +639 or 09 followed by 9 digits"):null
+  return valid
 }
 
 function fixStepIndicator(n) {
