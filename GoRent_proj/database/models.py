@@ -63,7 +63,7 @@ class RenteeRequest(models.Model):
     contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
 
     class Meta:
-        db_table = "Images"
+        db_table = "RenteeRequest"
 
     def __str__(self):
-        return "[" +self.id +"] " +self.space.address
+        return "[" +self.email +"] " +self.firstname +" (Rentee)"
