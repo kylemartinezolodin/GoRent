@@ -7,7 +7,7 @@ class RentOwner(models.Model):
     lastname = models.CharField(max_length = 50)
     birthday = models.DateField()
     contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
-
+    occupation = models.CharField(max_length = 50)
     class Meta:
         db_table = "RentOwner"
 
@@ -61,6 +61,7 @@ class RenteeRequest(models.Model):
     firstname = models.CharField(max_length = 50)
     lastname = models.CharField(max_length = 50)
     contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
+    occupation = models.CharField(max_length = 50)
 
     class Meta:
         db_table = "RenteeRequest"
