@@ -112,14 +112,14 @@ a:hover{
       {% csrf_token %}
       <div class="logContainerIn"> <!--container class-->
 
-        <label for="username">Email or Phone Number</label> <!--username-->
-            <input type="text" id="roundedIP" name="username">
+        <label for="username">Email</label> <!--username-->
+            <input type="text" id="roundedIP" name="username" required="email">
 
         <label for="password">Password</label><!--password-->
-            <input type="password" id="roundedIP" name="password">
+            <input type="password" id="roundedIP" name="password" required="password" minlength="8">
 
 
-        <button type="submit" name="btnLoginOwner">Log in</button> <!--submit button-->
+        <button type="submit" name="btnLoginOwner">Login</button> <!--submit button-->
 
        <div class="labelText">
            <label style="margin-left:28%">Not an Owner yet?</label>

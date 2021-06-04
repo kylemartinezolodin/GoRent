@@ -40,15 +40,15 @@ class GoRentOwnerRegisterPage(View):
 	def get(self, request):
 		return render(request, 'registers/ownerRegisterPage.html')
 	def post (self,request):
-		ownerFirstName = request.POST.get("ownerFirstName")
-		ownerLastName = request.POST.get("ownerLastName")
-		ownerEmail = request.POST.get("ownerEmail")
-		ownerPassword = request.POST.get("ownerPassword")
-		ownerMobileNumber = request.POST.get("ownerMobileNumber")
-		ownerBirthdate = request.POST.get("ownerBirthdate")
+		firstName = request.POST.get("firstName")
+		lastName = request.POST.get("lastName")
+		email = request.POST.get("email")
+		password = request.POST.get("password")
+		mobileNumber = request.POST.get("mobileNumber")
+		birthdate = request.POST.get("birthdate")
 		
-		obj = RentOwner(email = ownerEmail, firstname = ownerFirstName, lastname = ownerLastName, password = ownerPassword, contactnumber = ownerMobileNumber, 
-			birthday = ownerBirthdate)
+		obj = RentOwner(email = email, firstname = firstName, lastname = lastName, password = password, contactnumber = mobileNumber, 
+			birthday = birthdate)
 		obj.save()
 		return render(request, 'registers/loginOwner.html')
 
@@ -56,12 +56,12 @@ class GoRentShareeRegisterPage(View):
 	def get(self, request):
 		return render(request, 'registers/shareeRegisterPage.html')
 	def post (self,request):
-		shareeFirstName = request.POST.get("shareeFirstName")
-		shareeLastName = request.POST.get("shareeLastName")
-		shareeEmail = request.POST.get("shareeEmail")
-		shareePassword = request.POST.get("shareePassword")
-		shareeMobileNumber = request.POST.get("shareeMobileNumber")
-		shareeBirthdate = request.POST.get("shareeBirthdate")
+		shareeFirstName = request.POST.get("firstName")
+		shareeLastName = request.POST.get("lastName")
+		shareeEmail = request.POST.get("email")
+		shareePassword = request.POST.get("password")
+		shareeMobileNumber = request.POST.get("mobileNumber")
+		shareeBirthdate = request.POST.get("birthdate")
 		
 		obj = Sharee(email = shareeEmail, firstname = shareeFirstName, lastname = shareeLastName, password = shareePassword, contactnumber = shareeMobileNumber, 
 			birthday = shareeBirthdate)
