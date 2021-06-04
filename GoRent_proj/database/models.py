@@ -56,4 +56,14 @@ class Sharee(models.Model):
     def __str__(self):
         return "[" +self.email +"] " +self.lastname +" (Sharee)"
 
+class RenteeRequest(models.Model):
+    email = models.EmailField(primary_key=True, max_length=254)
+    firstname = models.CharField(max_length = 50)
+    lastname = models.CharField(max_length = 50)
+    contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
 
+    class Meta:
+        db_table = "Images"
+
+    def __str__(self):
+        return "[" +self.id +"] " +self.space.address
