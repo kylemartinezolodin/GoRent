@@ -24,4 +24,5 @@ from  django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
    	path('GoRent/', include('registers.urls', namespace='registers')),
+    path('Sharee/', include('sharee.urls', namespace='sharee')),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
