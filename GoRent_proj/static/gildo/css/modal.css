@@ -1,0 +1,100 @@
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+ 
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    
+ 
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content/Box */
+  .modal-content {
+  
+    overflow: auto; /* Enable scroll if needed */
+    background-color: #ffffff;
+    margin: 8% auto; /* 15% from the top and centered */
+    padding: 5px;
+    border: 1px solid #888;
+    width: 40%; /* Could be more or less, depending on screen size */
+    height: auto;
+ 
+  }
+
+  .modal-label{
+    font-size: 15px;
+    color: rgb(47, 216, 151);
+    margin: 10px 21% 3px;
+  }
+  
+  .modal-btn{
+    margin: 10px 25% 25px;
+    width: 50%;
+  }
+  
+  .modal-input{
+    display: block;
+    border-radius: 5px;
+    border: 3px solid rgb(16, 59, 39);
+    margin: auto;
+    width: 60%;
+    height: 45px;
+    background-color: rgb(92, 173, 129);
+    
+    
+  }
+  .modal-input:hover{
+    border: 3px solid rgb(65, 219, 155);
+    
+  }
+
+  .modal-input:focus{
+    border: 3px solid rgb(65, 219, 155);
+  }
+
+  
+  /* The Close Button */
+  .close {
+    color: #aaa;
+    float: left;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: rgb(9, 95, 42);
+    text-decoration: none;
+    cursor: pointer;
+  }
+
+  .modal-header {
+  font-family: "Seaford ", sans-serif;
+	padding: 2px 16px;
+	background-color: #5cb85c;
+	color: white;
+  text-align: center;
+  }
+
+  .modal-header-content{
+    margin: 10px auto 10px;
+  }
+  
+  .modal-body {
+    padding: 2px 16px;
+    background-color: rgb(8, 95, 66);
+    
+    }
+  
+  .modal-footer {
+    margin: auto;
+    width: 100%;
+	padding: 2px 16px;
+	background-color: #5cb85c;
+	color: white;
+  }
