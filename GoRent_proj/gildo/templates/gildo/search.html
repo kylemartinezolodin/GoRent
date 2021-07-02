@@ -25,8 +25,8 @@ https://www.tooplate.com/view/2095-level
     <link rel="stylesheet" type="text/css" href="{% static 'gildo/slick/slick-theme.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'gildo/css/datepicker.css' %}"/>
     <link rel="stylesheet" href="{% static 'gildo/css/tooplate-style.css' %}">                                   <!-- Templatemo style -->
-    <link rel="stylesheet" href="{% static 'search/css/gorent_styles.css' %}">  <!-- PAGE STYLES -->
-    <link rel="stylesheet" href="{% static 'css/leaflet/L.Control.MousePosition.css' %}">  <!-- LEAFLET COORDINATES STYLES -->
+    <link rel="stylesheet" href="{% static 'search/css/gorent_styles.css' %}">  <!-- MAIN PAGE STYLES -->
+    <link rel="stylesheet" href="{% static 'search/css/nearby_list.css' %}">  <!-- MAIN PAGE STYLES -->
 
 
     <!-- LEAFLET CSS (AND JS IT IS REQUIRED THAT JS SHOULD BE PUT AFTER THE CSS)-->
@@ -35,6 +35,7 @@ https://www.tooplate.com/view/2095-level
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin="">
     </script>
+    <link rel="stylesheet" href="{% static 'css/leaflet/L.Control.MousePosition.css' %}">  <!-- LEAFLET COORDINATES STYLES -->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -51,7 +52,7 @@ https://www.tooplate.com/view/2095-level
                         <img src="{% static 'img/gorent_icon.png' %}" alt="Site logo">
                         <img src="{% static 'img/gorent_plain.png' %}" alt="Site logo">
                     </div>
-    
+                    <!-- TOPNAV SEARCH -->
                     <div class="container-form-topnav_search">
                         {% csrf_token %}
                         <form action="index.html" method="get" class="">
@@ -107,15 +108,56 @@ https://www.tooplate.com/view/2095-level
                 </div>
             </div>
 
+            <!-- MAP -->
             <div id="map" class="map_viewport"></div>
             
-
+            <!--  -->
             <div class="container-nearby_list">
                 <form action="index.html" method="get" class="">
                     {% csrf_token %}
                     <input name="price" type="text" class="" id="inputLocation" placeholder="Budget (PHP)">
                 </form>
                 Nearby spaces:
+                <br>
+                <div class="container-nearby_list_items">
+                    <div>
+                        Crown Regency
+                    </div>
+                    <div>
+                    Fuente 12356 Kalsada St., Cebu City
+                    </div>
+                    <div>
+                    [Some Image][Some Image][Some Image]
+                    </div>
+                    (SPACE KUNUHAY)
+                    <button>Send Application</button>
+                </div>
+                <div class="container-nearby_list_items">
+                    <div>
+                        GV TOWER
+                    </div>
+                    <div>
+                        Colon 12356 Kalsada St., Cebu City
+                    </div>
+                    <div>
+                        [Some Image][Some Image][Some Image]
+                    </div>
+                    (MGA SPACES KUNUHAY)
+                    <button>Send Application</button>
+                </div>
+                <div class="container-nearby_list_items">
+                    <div>
+                        Queensland
+                    </div>
+                    <div>
+                        Colon 12356 Kalsada St., Cebu City
+                    </div>
+                    <div>
+                        NO IMAGE
+                    </div>
+                    (MGA SPACES KUNUHAY)
+                    <button>Send Application</button>
+                </div>
             </div>
 
             <!-- GILDO'S BODY CURRENTLY HIDDEN -->
