@@ -16,5 +16,5 @@ class GoRentBillingView(View):
 
 class GoRentRentingView(View):
 	def get(self, request):
-		return render(request, 'gildo/Renting.html')
+		return render(request, 'gildo/search.html')
 		
