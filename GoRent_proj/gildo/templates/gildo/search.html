@@ -25,7 +25,16 @@ https://www.tooplate.com/view/2095-level
     <link rel="stylesheet" type="text/css" href="{% static 'gildo/slick/slick-theme.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'gildo/css/datepicker.css' %}"/>
     <link rel="stylesheet" href="{% static 'gildo/css/tooplate-style.css' %}">                                   <!-- Templatemo style -->
+    <link rel="stylesheet" href="{% static 'search/css/gorent_styles.css' %}">  <!-- PAGE STYLES -->
+    <link rel="stylesheet" href="{% static 'css/leaflet/L.Control.MousePosition.css' %}">  <!-- LEAFLET COORDINATES STYLES -->
 
+
+    <!-- LEAFLET CSS (AND JS IT IS REQUIRED THAT JS SHOULD BE PUT AFTER THE CSS)-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+    crossorigin="">
+    </script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -36,10 +45,33 @@ https://www.tooplate.com/view/2095-level
 
     <body>
         <div class="tm-main-content" id="top">
-            <div class="tm-top-bar-bg"></div>
-            <div class="tm-top-bar" id="tm-top-bar">
+            <div class="gorent-top-navbar">
+                <div class="top-navbar-left_group">
+                    <div class="container-logo">
+                        <img src="{% static 'img/gorent_icon.png' %}" alt="Site logo">
+                        <img src="{% static 'img/gorent_plain.png' %}" alt="Site logo">
+                    </div>
+    
+                    <div class="container-form-topnav_search">
+                        {% csrf_token %}
+                        <form action="index.html" method="get" class="">
+                            <input name="location" type="text" class="" id="inputLocation" placeholder="Address...">
+                        </form>
+                    </div>
+                </div>
+
+                <div class="container-topnav_buttons">
+                    <a class="topnav_button" href="#">About Us</a>
+                    <!-- <a class="topnav_button" href="#"></a> -->
+                    <a class="topnav_button" href="#">Register your space</a>
+                </div>
+                
+            </div>
+
+            <!-- <div class="tm-top-bar-bg"></div>
+            <div class="tm-top-bar" id="tm-top-bar"> -->
                 <!-- Top Navbar -->
-                <div class="container">
+                <!-- <div class="container">
                     <div class="row">
                         
                         <nav class="navbar navbar-expand-lg narbar-light">
@@ -70,11 +102,24 @@ https://www.tooplate.com/view/2095-level
                                 </ul>
                             </div>                            
                         </nav>            
-                    </div>
+                    </div> -->
+
                 </div>
             </div>
 
-            <div class="tm-section tm-bg-img" id="tm-section-1">
+            <div id="map" class="map_viewport"></div>
+            
+
+            <div class="container-nearby_list">
+                <form action="index.html" method="get" class="">
+                    {% csrf_token %}
+                    <input name="price" type="text" class="" id="inputLocation" placeholder="Budget (PHP)">
+                </form>
+                Nearby spaces:
+            </div>
+
+            <!-- GILDO'S BODY CURRENTLY HIDDEN -->
+            <div class="tm-section tm-bg-img" id="tm-section-1" style="display: none">
                 <div class="tm-bg-green ie-container-width-fix-2">
                     <div class="container ie-h-align-center-fix">
                         <div class="row">
@@ -139,7 +184,7 @@ https://www.tooplate.com/view/2095-level
                                       <div class="left-column">
                                         <div class="column-content">
                                             
-                                                <div id="map"></div>        
+                                                <div id="map1"></div>        
                                                 
                                         </div>
 
@@ -179,20 +224,11 @@ https://www.tooplate.com/view/2095-level
                                     <input  type="submit" class="button special Search-btn" value="submit">
                                 </form>
                                 
-                                
                             </div>                        
                         </div>      
                     </div>
                 </div>                  
             </div>
-            
-            
-            
-            
-                        
-                 
-
-                 
             
             <!-- <div class="tm-section tm-section-pad tm-bg-img tm-position-relative" id="tm-section-6">
                 <div class="container ie-h-align-center-fix">
@@ -220,8 +256,10 @@ https://www.tooplate.com/view/2095-level
                     </div>        
                 </div>
             </div> -->
-            
-            <footer class="tm-bg-primary">
+
+
+            <!-- GILDO'S FOOTER CURRENTLY HIDDEN -->
+            <footer class="tm-bg-primary" style="display: none">
                 <div class="container">
                     <div class="row">
                         <p class="col-sm-12 text-center tm-font-light tm-color-white p-4 tm-margin-b-0">
@@ -240,15 +278,9 @@ https://www.tooplate.com/view/2095-level
         <script src="{% static 'gildo/js/datepicker.min.js' %}"></script>                <!-- https://github.com/qodesmith/datepicker -->
         <script src="{% static 'gildo/js/jquery.singlePageNav.min.js' %}"></script>      <!-- Single Page Nav (https://github.com/ChrisWojcik/single-page-nav) -->
         <script src="{% static 'gildo/slick/slick.min.js' %}"></script>                  <!-- http://kenwheeler.github.io/slick/ -->
-        <script async
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYfVgBJYGigmK55V_2gLQ_rjuouwWNn1E&callback=initMap">
-        </script>
         <script src="{% static 'gildo/js/maps.js' %}"></script>
 
        <script>
-
-            
-
             function setCarousel() {
                 
                 if ($('.tm-article-carousel').hasClass('slick-initialized')) {
