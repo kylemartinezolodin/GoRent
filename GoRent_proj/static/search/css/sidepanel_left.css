@@ -1,13 +1,20 @@
-.container-nearby_list {
+.map-sidepanel-left {
     height: 87.5vh;
     width: 20vw;
     position: absolute;
     top: 10vh;
     right: 0;
     z-index: 1000;
-    background-color: maroon;
+    background-color: pink;
+}
+
+.container-nearby_list {
 }
 
 .container-nearby_list_items {
     background-color: orange;
+}
+
+.container-nearby_list_loading_screen {
+    background-color: rgb(27, 223, 216);
 }

@@ -26,18 +26,3 @@
     padding: 1.7vw;
 }
 
-.map_viewport {
-    height: 90vh;
-    width: 100vw;
-    background-color: grey;
-}
-
-.container-nearby_list {
-    height: 87.5vh;
-    width: 20vw;
-    position: absolute;
-    top: 10vh;
-    right: 0;
-    z-index: 1000;
-    background-color: maroon;
-}

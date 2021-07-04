@@ -1,0 +1,26 @@
+.map_viewport {
+    height: 90vh;
+    width: 100vw;
+    background-color: grey;
+}
+
+.container-map_searchbar {
+    display: flex;
+
+    position: relative;
+    width: 25vw;
+    padding: 0.5vw;
+    margin: 1.5vh auto;
+
+    background-color: aqua;
+    z-index: 1010;
+}
+
+.map_seachbar {
+    width: 23vw;
+    margin: 1.5 auto;
+}
+
+.map_search_results {
+    
+}
