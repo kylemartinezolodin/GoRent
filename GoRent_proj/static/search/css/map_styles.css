@@ -1,5 +1,6 @@
 .map_viewport {
-    height: 90vh;
+    height: 93vh;
+    /* height: 90vh;  */ /* UNCOMMENT IF USING OLODINS TOP-NAVBAR */
     width: 100vw;
     background-color: grey;
 }
