@@ -1,4 +1,4 @@
-<!-- <!DOCTYPE html> -->
+<!DOCTYPE html>
 {%load static%}
 <html lang="en">
 <head>
@@ -25,17 +25,24 @@ https://www.tooplate.com/view/2095-level
     <link rel="stylesheet" type="text/css" href="{% static 'gildo/slick/slick-theme.css' %}"/>
     <link rel="stylesheet" type="text/css" href="{% static 'gildo/css/datepicker.css' %}"/>
     <link rel="stylesheet" href="{% static 'gildo/css/tooplate-style.css' %}">                                   <!-- Templatemo style -->
-    <link rel="stylesheet" href="{% static 'search/css/gorent_styles.css' %}">  <!-- MAIN PAGE STYLES -->
-    <link rel="stylesheet" href="{% static 'search/css/nearby_list.css' %}">  <!-- MAIN PAGE STYLES -->
+    <link rel="stylesheet" href="{% static 'search/css/page_styles.css' %}">  <!-- MAIN PAGE TOPNAV AND MAP  STYLES -->
+    <link rel="stylesheet" href="{% static 'search/css/sidepanel_left.css' %}">  <!-- MAIN PAGE NEARBY LISTING STYLES -->
+    <link rel="stylesheet" href="{% static 'search/css/map_styles.css' %}">  <!-- MAIN PAGE MAP STYLES -->
 
 
     <!-- LEAFLET CSS (AND JS IT IS REQUIRED THAT JS SHOULD BE PUT AFTER THE CSS)-->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" 
+        integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/> <!-- BASE LEAFLET STYLES -->
+    <link rel="stylesheet" href="{% static 'js/leaflet/geosearch.js' %}">  <!-- LEAFLET COORDINATES STYLES -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/> <!-- LEAFLET GEOSEARCH STYLES -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin="">
-    </script>
-    <link rel="stylesheet" href="{% static 'css/leaflet/L.Control.MousePosition.css' %}">  <!-- LEAFLET COORDINATES STYLES -->
+    </script><!-- BASE LEAFLET JS -->
+    <script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.umd.js"></script> <!-- LEAFLET ADD-ON GEOSEARCH JS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" /> <!-- LEAFLET ADD-ON leaflet-control-geocoder STYLES -->
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> <!-- LEAFLET ADD-ON leaflet-control-geocoder JS -->
+    <script src="{% static 'js/leaflet/geosearch.js' %}"></script> <!-- LEAFLET ADD-ON leaflet-geoip JS -->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -109,55 +116,132 @@ https://www.tooplate.com/view/2095-level
             </div>
 
             <!-- MAP -->
-            <div id="map" class="map_viewport"></div>
+            <div id="map" class="map_viewport">
+
+                <!-- MAP SEARCH BAR -->
+                <!-- <div class="container-map_searchbar">
+                    <input type="text" name="" id="" class="map_seachbar">
+                    
+                    <div class="map_search_results">
+                        Spain, Skimberlo 6000
+                    </div>
+                </div> -->
+            </div>
+
             
-            <!--  -->
-            <div class="container-nearby_list">
+            <!-- NEARBY LIST BLOCK -->
+            <div class="map-sidepanel-left">
+                
+                <button id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
+                <button id="button-auto_locate"  onclick="getLocation()">Enable Location</button>
+
+                <script type="text/javascript">
+                    user_locate = {
+                        isLocating: false, // BECOMES TRUE IF USER IS MANUALLY LOCATING 
+                        location: null,
+
+                        locationlistener: function (val) { // A MAKESHIFT LISTENER WHEN location PROPERTY IS CHANGED
+                            activateNearbyList()
+                        },
+                        set location(val) { // OVERIDING SETTER (I.E. user_locate.location = [some_value] EVENT)
+                            this._location = val // THE UNDERSCORE/"_" AFTER THE location IS VERY VITAL TO AVOID RECURSSION
+                            this.locationlistener(val);
+                        },
+                        get location() { // OVERIDING GETTER (I.E. console.log(user_locate.location) EVENT)
+                            return this._location
+                        }
+
+                    }
+
+                    function toggleMapLocate () {
+                        console.log("Click anywhere in the map now...");
+                        user_locate.isLocating = !user_locate.isLocating // locate IS A BOOLEAN
+                    }
+
+                    function getLocation() {
+                        if (navigator.geolocation) { // CHECKS IF GEOLOCATION IS SUPPORTED IN THE BROWSER
+                            navigator.geolocation.getCurrentPosition(showLocation);
+                        } else {
+                            document.querySelector("#location").innerHTML = "Geolocation is not supported by this browser. Manully pick location instead";
+                            document.querySelector("#button-auto_locate").style.display = "none"
+                        }
+                    }
+
+                    function activateNearbyList () { // HAPPENS IF user_locate.location IS NO LONGER NULL
+                        document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
+                        document.querySelector("#button-auto_locate").style.display = "none"
+                        document.querySelector("#container-nearby_list").style.display = "block"
+
+                        document.querySelector("#location").innerHTML = "ANG CURRENT NGA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA DISTANCE FORMULA"
+                    }
+
+                    function toggleLoadingScreen () { // WALA PA GI GAMIT KAY MURAG MO CAUSE OG PROBLEM, ANYWAY AESTHETICS RAMNSAD NI NGA FUNCTIONALITIES
+                        loading_screen = document.querySelector("#container-nearby_list_loading_screen")
+                        if (loading_screen.style.display == "none") {
+                            loading_screen.style.display = "block"
+                            document.querySelector("#container-nearby_list").style.display = "none"
+                        }
+                        else {
+                            loading_screen.style.display = "none"
+                            document.querySelector("#container-nearby_list").style.display = "block"
+                        }
+                    }
+
+                </script>
+
                 <form action="index.html" method="get" class="">
                     {% csrf_token %}
                     <input name="price" type="text" class="" id="inputLocation" placeholder="Budget (PHP)">
                 </form>
-                Nearby spaces:
+
+                Nearby spaces: (ANG ORDER SA MGA SPACES KAY USING DISTANCE FORMULA)
                 <br>
-                <div class="container-nearby_list_items">
-                    <div>
-                        Crown Regency
-                    </div>
-                    <div>
-                    Fuente 12356 Kalsada St., Cebu City
-                    </div>
-                    <div>
-                    [Some Image][Some Image][Some Image]
-                    </div>
-                    (SPACE KUNUHAY)
-                    <button>Send Application</button>
+                <div id="location"></div>
+                <div id="container-nearby_list_loading_screen" class="container-nearby_list_loading_screen" style="display: none;">
+                    LOADING (LOADING SCREEN NI KUNG KAYA DESIGNA NI, PERO LOW PRIORITY JUD ANG DESIGNx2)
                 </div>
-                <div class="container-nearby_list_items">
-                    <div>
-                        GV TOWER
-                    </div>
-                    <div>
-                        Colon 12356 Kalsada St., Cebu City
-                    </div>
-                    <div>
+                <div id="container-nearby_list" class="container-nearby_list" style="display: none;">
+                    <div class="container-nearby_list_items">
+                        <div>
+                            Crown Regency
+                        </div>
+                        <div>
+                        Fuente 12356 Kalsada St., Cebu City
+                        </div>
+                        <div>
                         [Some Image][Some Image][Some Image]
+                        </div>
+                        (SPACE KUNUHAY)
+                        <button>Send Application</button>
                     </div>
-                    (MGA SPACES KUNUHAY)
-                    <button>Send Application</button>
+                    <div class="container-nearby_list_items">
+                        <div>
+                            GV TOWER
+                        </div>
+                        <div>
+                            Colon 12356 Kalsada St., Cebu City
+                        </div>
+                        <div>
+                            [Some Image][Some Image][Some Image]
+                        </div>
+                        (MGA SPACES KUNUHAY)
+                        <button>Send Application</button>
+                    </div>
+                    <div class="container-nearby_list_items">
+                        <div>
+                            Queensland
+                        </div>
+                        <div>
+                            Colon 12356 Kalsada St., Cebu City
+                        </div>
+                        <div>
+                            NO IMAGE
+                        </div>
+                        (MGA SPACES KUNUHAY)
+                        <button>Send Application</button>
+                    </div>
                 </div>
-                <div class="container-nearby_list_items">
-                    <div>
-                        Queensland
-                    </div>
-                    <div>
-                        Colon 12356 Kalsada St., Cebu City
-                    </div>
-                    <div>
-                        NO IMAGE
-                    </div>
-                    (MGA SPACES KUNUHAY)
-                    <button>Send Application</button>
-                </div>
+
             </div>
 
             <!-- GILDO'S BODY CURRENTLY HIDDEN -->
