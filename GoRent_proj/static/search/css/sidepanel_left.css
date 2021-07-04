@@ -1,8 +1,9 @@
 .map-sidepanel-left {
-    height: 87.5vh;
+    height: 100vh;
+    /* height: 87.5vh; */ /* UNCOMMENT IF USING OLODINS TOP-NAVBAR */
     width: 20vw;
     position: absolute;
-    top: 10vh;
+    /* top: 10vh; */ /* UNCOMMENT IF USING OLODINS TOP-NAVBAR */
     right: 0;
     z-index: 1000;
     background-color: pink;
