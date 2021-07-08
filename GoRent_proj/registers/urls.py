@@ -7,5 +7,5 @@ urlpatterns=[
    path('Sharee/Login', views.GoRentLoginShareePage.as_view(), name="gorent_loginSharee_view"),
    path('Owner/Register', views.GoRentOwnerRegisterPage.as_view(), name="gorent_OwnerRegister_view"),
    path('Sharee/Register', views.GoRentShareeRegisterPage.as_view(), name="gorent_ShareeRegister_view"),
-   path('', views.GoRentLandingPage.as_view(), name="gorent_landing_view"),
+   path('Logout', views.GoRentLogoutPage.as_view(), name="logout_view"),
 ]
