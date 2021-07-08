@@ -26,7 +26,8 @@ https://www.tooplate.com/view/2095-level
     <link rel="stylesheet" type="text/css" href="{% static 'gildo/css/datepicker.css' %}"/>
     <link rel="stylesheet" href="{% static 'gildo/css/tooplate-style.css' %}">                                   <!-- Templatemo style -->
     <link rel="stylesheet" href="{% static 'search/css/page_styles.css' %}">  <!-- MAIN PAGE TOPNAV AND MAP  STYLES -->
-    <link rel="stylesheet" href="{% static 'search/css/sidepanel_left.css' %}">  <!-- MAIN PAGE NEARBY LISTING STYLES -->
+    <link rel="stylesheet" href="{% static 'search/css/sidepanel_left.css' %}">  <!-- MAIN PAGE ADD SPACE STYLES -->
+    <link rel="stylesheet" href="{% static 'search/css/sidepanel_right.css' %}">  <!-- MAIN PAGE NEARBY LISTING STYLES -->
     <link rel="stylesheet" href="{% static 'search/css/map_styles.css' %}">  <!-- MAIN PAGE MAP STYLES -->
 
 
@@ -88,19 +89,29 @@ https://www.tooplate.com/view/2095-level
                                 <ul class="navbar-nav ml-auto">
                                     <li class="nav-item">
                                         <a class="nav-link" href="#top">About Us <span class="sr-only">(current)</span></a>
-                                      </li>
-                                      <li class="nav-item">
-                                        <a class="nav-link" href="#tm-section-2">Register your space</a>
-                                      </li>
-                                      <!-- <li class="nav-item">
+                                    </li>
+
+                                    {% if user is None %} <!-- IF "user" EXIST IN CONTEXT -->
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'registers:gorent_loginOwner_view' %}">Register your space</a>
+                                    </li>
+                                    {% else %}
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="settings.html">{{user.fistname}}{{user.lastname}}</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{% url 'registers:logout_view' %}">logout</a>
+                                    </li>
+                                    {% endif %}
+                                    <!-- <li class="nav-item">
                                         <a class="nav-link active" href="#tm-section-5">Rent</a>
-                                      </li>
-                                      <li class="nav-item">
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link" href="Billing.html">Billings</a>
-                                      </li>
-                                      <li class="nav-item">
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="nav-link" href="#tm-section-6" >My Account</a>
-                                      </li> -->
+                                    </li> -->
                                 </ul>
                             </div>                            
                         </nav>            
@@ -120,122 +131,137 @@ https://www.tooplate.com/view/2095-level
                         Spain, Skimberlo 6000
                     </div>
                 </div>
-            </div>
+                -->
+                
+                {% if user is not None %}
+                <div class="map-sidepanel-left">
+                    <button id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
+                </div>
+                {% endif %}
 
             
-            <!-- NEARBY LIST BLOCK -->
-            <div class="map-sidepanel-left">
-                
-                <button id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
-                <button id="button-auto_locate"  onclick="getLocation()">Enable Location</button>
+                <!-- NEARBY LIST BLOCK -->
+                <div class="map-sidepanel-right">
+                    
+                    <button id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
+                    <button id="button-auto_locate"  onclick="getLocation()">Enable Location</button>
 
-                <script type="text/javascript">
-                    user_locate = {
-                        isLocating: false, // BECOMES TRUE IF USER IS MANUALLY LOCATING 
-                        location: null,
+                    <script type="text/javascript">
+                        user_locate = {
+                            isLocating: false, // BECOMES TRUE IF USER IS MANUALLY LOCATING 
+                            location: null,
 
-                        locationlistener: function (val) { // A MAKESHIFT LISTENER WHEN location PROPERTY IS CHANGED
-                            activateNearbyList()
-                        },
-                        set location(val) { // OVERIDING SETTER (I.E. user_locate.location = [some_value] EVENT)
-                            this._location = val // THE UNDERSCORE/"_" AFTER THE location IS VERY VITAL TO AVOID RECURSSION
-                            this.locationlistener(val);
-                        },
-                        get location() { // OVERIDING GETTER (I.E. console.log(user_locate.location) EVENT)
-                            return this._location
+                            locationlistener: function (val) { // A MAKESHIFT LISTENER WHEN location PROPERTY IS CHANGED
+                                activateNearbyList()
+                            },
+                            set location(val) { // OVERIDING SETTER (I.E. user_locate.location = [some_value] EVENT)
+                                this._location = val // THE UNDERSCORE/"_" AFTER THE location IS VERY VITAL TO AVOID RECURSSION
+                                this.locationlistener(val);
+                            },
+                            get location() { // OVERIDING GETTER (I.E. console.log(user_locate.location) EVENT)
+                                return this._location
+                            }
+
                         }
 
-                    }
+                        function toggleMapLocate () {
+                            console.log("Click anywhere in the map now...");
 
-                    function toggleMapLocate () {
-                        console.log("Click anywhere in the map now...");
-                        user_locate.isLocating = !user_locate.isLocating // locate IS A BOOLEAN
-                    }
+                            setTimeout(function() {
+                                user_locate.isLocating = !user_locate.isLocating // locate IS A BOOLEAN
+                            }, 100);
+                        }
 
-                    function getLocation() {
-                        if (navigator.geolocation) { // CHECKS IF GEOLOCATION IS SUPPORTED IN THE BROWSER
-                            navigator.geolocation.getCurrentPosition(showLocation);
-                        } else {
-                            document.querySelector("#location").innerHTML = "Geolocation is not supported by this browser. Manully pick location instead";
+                        function getLocation() {
+                            if (navigator.geolocation) { // CHECKS IF GEOLOCATION IS SUPPORTED IN THE BROWSER
+                                navigator.geolocation.getCurrentPosition(showLocation);
+                            } else {
+                                document.querySelector("#location").innerHTML = "Geolocation is not supported by this browser. Manully pick location instead";
+                                document.querySelector("#button-auto_locate").style.display = "none"
+                            }
+                        }
+
+                        function activateNearbyList () { // HAPPENS IF user_locate.location IS NO LONGER NULL
+                            document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
                             document.querySelector("#button-auto_locate").style.display = "none"
-                        }
-                    }
-
-                    function activateNearbyList () { // HAPPENS IF user_locate.location IS NO LONGER NULL
-                        document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
-                        document.querySelector("#button-auto_locate").style.display = "none"
-                        document.querySelector("#container-nearby_list").style.display = "block"
-
-                        document.querySelector("#location").innerHTML = "ANG CURRENT NGA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA DISTANCE FORMULA"
-                    }
-
-                    function toggleLoadingScreen () { // WALA PA GI GAMIT KAY MURAG MO CAUSE OG PROBLEM, ANYWAY AESTHETICS RAMNSAD NI NGA FUNCTIONALITIES
-                        loading_screen = document.querySelector("#container-nearby_list_loading_screen")
-                        if (loading_screen.style.display == "none") {
-                            loading_screen.style.display = "block"
-                            document.querySelector("#container-nearby_list").style.display = "none"
-                        }
-                        else {
-                            loading_screen.style.display = "none"
                             document.querySelector("#container-nearby_list").style.display = "block"
+
+                            document.querySelector("#location").innerHTML = "ANG CURRENT NGA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA DISTANCE FORMULA"
                         }
-                    }
 
-                </script>
+                        function toggleLoadingScreen () { // WALA PA GI GAMIT KAY MURAG MO CAUSE OG PROBLEM, ANYWAY AESTHETICS RAMNSAD NI NGA FUNCTIONALITIES
+                            loading_screen = document.querySelector("#container-nearby_list_loading_screen")
+                            if (loading_screen.style.display == "none") {
+                                loading_screen.style.display = "block"
+                                document.querySelector("#container-nearby_list").style.display = "none"
+                            }
+                            else {
+                                loading_screen.style.display = "none"
+                                document.querySelector("#container-nearby_list").style.display = "block"
+                            }
+                        }
 
-                <form action="index.html" method="get" class="">
-                    {% csrf_token %}
-                    <input name="price" type="text" class="" id="inputLocation" placeholder="Budget (PHP)">
-                </form>
+                    </script>
 
-                Nearby spaces: (ANG ORDER SA MGA SPACES KAY USING DISTANCE FORMULA)
-                <br>
-                <div id="location"></div>
-                <div id="container-nearby_list_loading_screen" class="container-nearby_list_loading_screen" style="display: none;">
-                    LOADING (LOADING SCREEN NI KUNG KAYA DESIGNA NI, PERO LOW PRIORITY JUD ANG DESIGNx2)
-                </div>
-                <div id="container-nearby_list" class="container-nearby_list" style="display: none;">
-                    <div class="container-nearby_list_items">
-                        <div>
-                            Crown Regency
-                        </div>
-                        <div>
-                        Fuente 12356 Kalsada St., Cebu City
-                        </div>
-                        <div>
-                        [Some Image][Some Image][Some Image]
-                        </div>
-                        (SPACE KUNUHAY)
-                        <button>Send Application</button>
+                    <form action="index.html" method="get" class="">
+                        {% csrf_token %}
+                        <input name="price" type="text" class="" id="inputLocation" placeholder="Budget (PHP)">
+                    </form>
+
+                    Nearby spaces: (ANG ORDER SA MGA SPACES KAY USING DISTANCE FORMULA)
+                    <br>
+                    <div id="location"></div>
+                    <div id="container-nearby_list_loading_screen" class="container-nearby_list_loading_screen" style="display: none;">
+                        LOADING (LOADING SCREEN NI KUNG KAYA DESIGNA NI, PERO LOW PRIORITY JUD ANG DESIGNx2)
                     </div>
-                    <div class="container-nearby_list_items">
-                        <div>
-                            GV TOWER
-                        </div>
-                        <div>
-                            Colon 12356 Kalsada St., Cebu City
-                        </div>
-                        <div>
+                    <div id="container-nearby_list" class="container-nearby_list" style="display: none;">
+                        <div class="container-nearby_list_items">
+                            <div>
+                                Crown Regency
+                            </div>
+                            <div>
+                            Fuente 12356 Kalsada St., Cebu City
+                            </div>
+                            <div>
                             [Some Image][Some Image][Some Image]
+                            </div>
+                            (SPACE KUNUHAY NI)
+                            <button>Send Application</button>
                         </div>
-                        (MGA SPACES KUNUHAY)
-                        <button>Send Application</button>
+                        <div class="container-nearby_list_items">
+                            <div>
+                                GV TOWER
+                            </div>
+                            <div>
+                                Colon 12356 Kalsada St., Cebu City
+                            </div>
+                            <div>
+                                [Some Image][Some Image][Some Image]
+                            </div>
+                            (SPACES KUNUHAY NI)
+                            <button>Send Application</button>
+                        </div>
+                        <div class="container-nearby_list_items">
+                            <div>
+                                Queensland
+                            </div>
+                            <div>
+                                Colon 12356 Kalsada St., Cebu City
+                            </div>
+                            <div>
+                                NO IMAGE
+                            </div>
+                            (SPACES KUNUHAY NI)
+                            <button>Send Application</button>
+                        </div>
                     </div>
-                    <div class="container-nearby_list_items">
-                        <div>
-                            Queensland
-                        </div>
-                        <div>
-                            Colon 12356 Kalsada St., Cebu City
-                        </div>
-                        <div>
-                            NO IMAGE
-                        </div>
-                        (MGA SPACES KUNUHAY)
-                        <button>Send Application</button>
-                    </div>
-                </div>
 
+                </div>
+            </div>
+
+            <div>
+                SKRTTTT
+                {{user.email}}
             </div>
 
             <!-- GILDO'S BODY CURRENTLY HIDDEN -->

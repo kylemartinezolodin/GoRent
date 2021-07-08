@@ -1,21 +1,10 @@
 .map-sidepanel-left {
-    height: 100vh;
-    /* height: 87.5vh; */ /* UNCOMMENT IF USING OLODINS TOP-NAVBAR */
+    height: 40vh;
     width: 20vw;
     position: absolute;
-    /* top: 10vh; */ /* UNCOMMENT IF USING OLODINS TOP-NAVBAR */
-    right: 0;
+    left: 0;
+    bottom: 2.5vh;
+
     z-index: 1000;
-    background-color: pink;
-}
-
-.container-nearby_list {
-}
-
-.container-nearby_list_items {
-    background-color: orange;
-}
-
-.container-nearby_list_loading_screen {
-    background-color: rgb(27, 223, 216);
+    background-color: rgb(255, 128, 149);
 }

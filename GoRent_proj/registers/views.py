@@ -9,17 +9,26 @@ from database.models import *
 
 class GoRentLoginOwnerPage(View):
 	def get(self, request):
-		return render(request, 'registers/loginOwner.html') # THIS REFERES TO TEMPLATE PATH, FIND url.py  IF YOU WANT TO LIVE ACCESS THE PAGE 
+		return render(request, 'registers/loginOwner.html') # THIS REFERES TO TEMPLATE PATH, FIND url.py  IF YOU WANT TO LIVE ACCESS THE PAGE
+
 	def post(self, request):
-		if request.method == 'POST':
-			if 'btnLoginOwner' in request.POST:
-				username = request.POST.get("username")
-				password = request.POST.get("password")
-				user_object = RentOwner.objects.filter(email = username)
-				if(user_object.count() == 1 and user_object[0].password == password):
-					return HttpResponse("Success") #PUT THE REDIRECTORY FOR THE OWNER MAINPAGE HERE
-				else:
-					return HttpResponse("Fail")
+		username = request.POST.get("username")
+		password = request.POST.get("password")
+
+		user_object = RentOwner.objects.filter(email = username) 
+		print(user_object)
+
+		if(user_object.count() == 1 and user_object[0].password == password): # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
+			user_object = user_object[0]
+
+			# USING REDIRECT DOES NOT HAVE CONTEXT ARGUMENT THUS WE NEED TO USE SESSIONS
+			request.session["user_email"] = user_object.email
+			request.session["user_password"] = user_object.password
+
+			return redirect('gildo:main_view') # CALL THIS VIEW (ANG GET FUNCTION IEXECUTE ANI)
+
+		else:
+			return HttpResponse("Fail \n inputs: " +username +", " +password +" Para rani debug dapat jud dili maka hibaw ang mo login unsa iya sayup")
 
 class GoRentLoginShareePage(View):
 	def get(self, request):
@@ -30,10 +39,11 @@ class GoRentLoginShareePage(View):
 				username = request.POST.get("username")
 				password = request.POST.get("password")
 				user_object = Sharee.objects.get(email = username)
-				if(user_object.count() == 1 and user_object[0].password == password):
+				if(user_object.count() == 1 and user_object[0].password == password):  # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
+					
 					return HttpResponse("Success") #PUT THE REDIRECTORY FOR THE SHAREE MAINPAGE HERE
 				else:
-					return HttpResponse("Fail")
+					return HttpResponse("Fail \n inputs: " +username +", " +password +" Para rani debug dapat jud dili maka hibaw ang mo login unsa iya sayup")
 
 
 class GoRentOwnerRegisterPage(View):	
@@ -46,8 +56,9 @@ class GoRentOwnerRegisterPage(View):
 		password = request.POST.get("password")
 		mobileNumber = request.POST.get("mobileNumber")
 		birthdate = request.POST.get("birthdate")
+		occupation = request.POST.get("occupation")
 		
-		obj = RentOwner(email = ownerEmail, firstname = ownerFirstName, lastname = ownerLastName, password = ownerPassword, contactnumber = ownerMobileNumber, birthday = ownerBirthdate)
+		obj = RentOwner(email = email, firstname = firstName, lastname = lastName, password = password, contactnumber = mobileNumber, birthday = birthdate, occupation = occupation)
 		obj.save()
 		return render(request, 'registers/loginOwner.html')
 
@@ -64,9 +75,11 @@ class GoRentShareeRegisterPage(View):
 		
 		obj = Sharee(email = shareeEmail, firstname = shareeFirstName, lastname = shareeLastName, password = shareePassword, contactnumber = shareeMobileNumber, birthday = shareeBirthdate)
 		obj.save()
-		return redirect('registers:gorent_loginSharee_view')
+		return render(request, 'registers/loginSharee.html')# BAWAL
 
-class GoRentLandingPage(View):
+class GoRentLogoutPage(View):
 	def get(self, request):
-		return render(request, 'registers/landingPage.html') # THIS REFERES TO TEMPLATE PATH, FIND url.py  IF YOU WANT TO LIVE ACCESS THE PAGE 
+		request.session.clear()
+		request.session.flush()
+		return redirect('gildo:main_view') # CALL THIS VIEW (ANG GET FUNCTION IEXECUTE ANI)
 		
