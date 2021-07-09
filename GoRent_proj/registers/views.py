@@ -22,6 +22,7 @@ class GoRentLoginOwnerPage(View):
 			user_object = user_object[0]
 
 			# USING REDIRECT DOES NOT HAVE CONTEXT ARGUMENT THUS WE NEED TO USE SESSIONS
+			request.session["user_type"] = "RentOwner"
 			request.session["user_email"] = user_object.email
 			request.session["user_password"] = user_object.password
 
@@ -34,17 +35,25 @@ class GoRentLoginShareePage(View):
 	def get(self, request):
 		return render(request, 'registers/loginSharee.html') # THIS REFERES TO TEMPLATE PATH, FIND url.py  IF YOU WANT TO LIVE ACCESS THE PAGE 
 	def post(self, request):
-		if request.method == 'POST':
-			if 'btnLoginSharee' in request.POST:
-				username = request.POST.get("username")
-				password = request.POST.get("password")
-				user_object = Sharee.objects.get(email = username)
-				if(user_object.count() == 1 and user_object[0].password == password):  # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
-					
-					return HttpResponse("Success") #PUT THE REDIRECTORY FOR THE SHAREE MAINPAGE HERE
-				else:
-					return HttpResponse("Fail \n inputs: " +username +", " +password +" Para rani debug dapat jud dili maka hibaw ang mo login unsa iya sayup")
 
+		username = request.POST.get("username")
+		password = request.POST.get("password")
+
+		user_object = Sharee.objects.filter(email = username) 
+		print(user_object)
+
+		if(user_object.count() == 1 and user_object[0].password == password): # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
+			user_object = user_object[0]
+
+			# USING REDIRECT DOES NOT HAVE CONTEXT ARGUMENT THUS WE NEED TO USE SESSIONS
+			request.session["user_type"] = "Sharee"
+			request.session["user_email"] = user_object.email
+			request.session["user_password"] = user_object.password
+
+			return redirect('gildo:main_view') # CALL THIS VIEW (ANG GET FUNCTION IEXECUTE ANI)
+
+		else:
+			return HttpResponse("Fail \n inputs: " +username +", " +password +" Para rani debug dapat jud dili maka hibaw ang mo login unsa iya sayup")
 
 class GoRentOwnerRegisterPage(View):	
 	def get(self, request):
@@ -60,7 +69,7 @@ class GoRentOwnerRegisterPage(View):
 		
 		obj = RentOwner(email = email, firstname = firstName, lastname = lastName, password = password, contactnumber = mobileNumber, birthday = birthdate, occupation = occupation)
 		obj.save()
-		return render(request, 'registers/loginOwner.html')
+		return redirect('registers:loginOwner_view')
 
 class GoRentShareeRegisterPage(View):	
 	def get(self, request):
@@ -75,11 +84,16 @@ class GoRentShareeRegisterPage(View):
 		
 		obj = Sharee(email = shareeEmail, firstname = shareeFirstName, lastname = shareeLastName, password = shareePassword, contactnumber = shareeMobileNumber, birthday = shareeBirthdate)
 		obj.save()
-		return render(request, 'registers/loginSharee.html')# BAWAL
+		return redirect('registers:loginSharee_view')
 
 class GoRentLogoutPage(View):
 	def get(self, request):
 		request.session.clear()
 		request.session.flush()
 		return redirect('gildo:main_view') # CALL THIS VIEW (ANG GET FUNCTION IEXECUTE ANI)
+
+		
+class GoRentAboutPage(View):
+	def get(self, request):
+		return render(request, 'registers/landingPage.html')
 		
