@@ -133,75 +133,13 @@ https://www.tooplate.com/view/2095-level
                 </div>
                 -->
                 
-                {% if user is not None %}
-                <div class="map-sidepanel-left">
-                    <button id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
-                </div>
-                {% endif %}
+                {% if user is None %}
 
-            
                 <!-- NEARBY LIST BLOCK -->
                 <div class="map-sidepanel-right">
                     
                     <button id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
                     <button id="button-auto_locate"  onclick="getLocation()">Enable Location</button>
-
-                    <script type="text/javascript">
-                        user_locate = {
-                            isLocating: false, // BECOMES TRUE IF USER IS MANUALLY LOCATING 
-                            location: null,
-
-                            locationlistener: function (val) { // A MAKESHIFT LISTENER WHEN location PROPERTY IS CHANGED
-                                activateNearbyList()
-                            },
-                            set location(val) { // OVERIDING SETTER (I.E. user_locate.location = [some_value] EVENT)
-                                this._location = val // THE UNDERSCORE/"_" AFTER THE location IS VERY VITAL TO AVOID RECURSSION
-                                this.locationlistener(val);
-                            },
-                            get location() { // OVERIDING GETTER (I.E. console.log(user_locate.location) EVENT)
-                                return this._location
-                            }
-
-                        }
-
-                        function toggleMapLocate () {
-                            console.log("Click anywhere in the map now...");
-
-                            setTimeout(function() {
-                                user_locate.isLocating = !user_locate.isLocating // locate IS A BOOLEAN
-                            }, 100);
-                        }
-
-                        function getLocation() {
-                            if (navigator.geolocation) { // CHECKS IF GEOLOCATION IS SUPPORTED IN THE BROWSER
-                                navigator.geolocation.getCurrentPosition(showLocation);
-                            } else {
-                                document.querySelector("#location").innerHTML = "Geolocation is not supported by this browser. Manully pick location instead";
-                                document.querySelector("#button-auto_locate").style.display = "none"
-                            }
-                        }
-
-                        function activateNearbyList () { // HAPPENS IF user_locate.location IS NO LONGER NULL
-                            document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
-                            document.querySelector("#button-auto_locate").style.display = "none"
-                            document.querySelector("#container-nearby_list").style.display = "block"
-
-                            document.querySelector("#location").innerHTML = "ANG CURRENT NGA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA DISTANCE FORMULA"
-                        }
-
-                        function toggleLoadingScreen () { // WALA PA GI GAMIT KAY MURAG MO CAUSE OG PROBLEM, ANYWAY AESTHETICS RAMNSAD NI NGA FUNCTIONALITIES
-                            loading_screen = document.querySelector("#container-nearby_list_loading_screen")
-                            if (loading_screen.style.display == "none") {
-                                loading_screen.style.display = "block"
-                                document.querySelector("#container-nearby_list").style.display = "none"
-                            }
-                            else {
-                                loading_screen.style.display = "none"
-                                document.querySelector("#container-nearby_list").style.display = "block"
-                            }
-                        }
-
-                    </script>
 
                     <form action="index.html" method="get" class="">
                         {% csrf_token %}
@@ -257,11 +195,153 @@ https://www.tooplate.com/view/2095-level
                     </div>
 
                 </div>
-            </div>
 
-            <div>
-                SKRTTTT
-                {{user.email}}
+                {% else %}
+                
+                <div class="map-sidepanel-left">
+                    Add/Register Space
+                    <br>
+                    <button id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
+                    <button id="button-auto_locate"  onclick="getLocation()">Enable Location</button>
+                    <div id="location"></div>
+                    
+                    <button id="button-add_space_image" style="display:none">Add Image</button>
+                    <button id="button-submit_space" style="display:none">Submit</button>
+                </div>
+                
+                <!-- NEARBY LIST BLOCK -->
+                <div class="map-sidepanel-right">
+
+                    Nearby spaces: (ANG ORDER SA MGA SPACES KAY USING DISTANCE FORMULA)
+                    <br>
+                    <div id="container-request_list" class="container-request_list">
+                        <div class="container-request_list_items">
+                            <div>
+                                [Some User Image] [Firstname] [Lastname]
+                            </div>
+                            <div>
+                                Email: [Email] <br>
+                                Contact: [contact_number]
+                            </div>
+                            <button>Accept</button>
+                            <button>Reject</button>
+                            <br>
+                            (REQUEST KUNUHAY NI)
+                        </div>
+                        <div class="container-request_list_items">
+                            <div>
+                                [Some User Image] [Firstname] [Lastname]
+                            </div>
+                            <div>
+                                Email: [Email] <br>
+                                Contact: [contact_number]
+                            </div>
+                            <button>Accept</button>
+                            <button>Reject</button>
+                            <br>
+                            (REQUEST KUNUHAY NI)
+                        </div>
+                        <div class="container-request_list_items">
+                            <div>
+                                [Some User Image] [Firstname] [Lastname]
+                            </div>
+                            <div>
+                                Email: [Email] <br>
+                                Contact: [contact_number]
+                            </div>
+                            <button>Accept</button>
+                            <button>Reject</button>
+                            <br>
+                            (REQUEST KUNUHAY NI)
+                        </div>
+                    </div>
+
+                </div>
+
+                {% endif %}
+
+                <script type="text/javascript">
+                    
+                    // ADD MARKER SAMPLE CODE
+                    markers = [
+                        L.marker([10.3157, 123.8854]),
+                        L.marker([10.30, 123.700]),
+                    ]
+
+
+                    user_flag = {% if user is None %} false {% else %} true {% endif %};
+                    user_locate = {
+                        isLocating: false, // BECOMES TRUE IF USER IS MANUALLY LOCATING 
+                        location: null,
+                        address: null, // L.Control.Geocoder FROM: https://github.com/perliedman/leaflet-control-geocoder/tree/1.13.0#lcontrolgeocoder IS ASYCNHRONOUS THUS WHY WE NEED TO UPDATE AFTER user_locate.address IS UPDATED
+                        addressListener: function (val) { // A MAKESHIFT LISTENER WHEN address PROPERTY IS CHANGED
+                            if (user_flag)
+                                fillSpaceInfo() // USED WHEN LOGGED IN
+                            else
+                                activateNearbyList() // USED WHEN RENTEE
+                        },
+                        set address(val) { // OVERIDING SETTER (I.E. user_locate.address = [some_value] EVENT)
+                            this._address = val // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                            this.addressListener(val);
+                        },
+                        get address() { // OVERIDING GETTER (I.E. console.log(user_locate.address) EVENT)
+                            return this._address // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                        },
+                    }
+                    
+                    // A MAKESHIFT SLEEP() FROM: https://www.sitepoint.com/delay-sleep-pause-wait/
+                    function sleep(ms) {
+                        return new Promise(resolve => setTimeout(resolve, ms));
+                    }
+                    
+                    async function toggleMapLocate () { // IT IS ASYNCH BECUASE IT USES THE MAKESHIFT SLEEP() FROM: https://www.sitepoint.com/delay-sleep-pause-wait/
+                        await sleep(100)
+                        // setTimeout(function() {
+                        //     user_locate.isLocating = !user_locate.isLocating // locate IS A BOOLEAN
+                        // }, 100);
+                        user_locate.isLocating = !user_locate.isLocating
+                        console.log("isLocating:" +user_locate.isLocating)
+                    }
+
+                    function getLocation() {
+                        if (navigator.geolocation) { // CHECKS IF GEOLOCATION IS SUPPORTED IN THE BROWSER
+                            navigator.geolocation.getCurrentPosition(showLocation);
+                        } else {
+                            document.querySelector("#location").innerHTML = "Geolocation is not supported by this browser. Manully pick location instead";
+                            document.querySelector("#button-auto_locate").style.display = "none"
+                        }
+                    }
+
+                    function activateNearbyList () { // HAPPENS IF user_locate.location IS NO LONGER NULL
+                        document.querySelector("#location").innerHTML = "ANG CURRENT NGA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA DISTANCE FORMULA"
+
+                        document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
+                        document.querySelector("#button-auto_locate").style.display = "none"
+                        document.querySelector("#container-nearby_list").style.display = "block"
+                    }
+                    
+                    function fillSpaceInfo () { // HAPPENS IF user_locate.location IS NO LONGER NULL
+                        document.querySelector("#location").innerHTML = "ANG ADDRESS KAY: " +user_locate.address +" NYA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA MAKA ADD OG SPACE"
+
+                        document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
+                        document.querySelector("#button-auto_locate").style.display = "none"
+                        document.querySelector("#button-submit_space").style.display = "block"
+                        document.querySelector("#button-add_space_image").style.display = "block"
+                    }
+
+                    function toggleLoadingScreen () { // WALA PA GI GAMIT KAY MURAG MO CAUSE OG PROBLEM, ANYWAY AESTHETICS RAMNSAD NI NGA FUNCTIONALITIES
+                        loading_screen = document.querySelector("#container-nearby_list_loading_screen")
+                        if (loading_screen.style.display == "none") {
+                            loading_screen.style.display = "block"
+                            document.querySelector("#container-nearby_list").style.display = "none"
+                        }
+                        else {
+                            loading_screen.style.display = "none"
+                            document.querySelector("#container-nearby_list").style.display = "block"
+                        }
+                    }
+
+                </script>
             </div>
 
             <!-- GILDO'S BODY CURRENTLY HIDDEN -->
