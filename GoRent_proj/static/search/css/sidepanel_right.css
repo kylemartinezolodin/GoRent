@@ -13,9 +13,15 @@
 }
 
 .container-nearby_list_items {
+    margin: 1vh 0;
     background-color: orange;
 }
 
 .container-nearby_list_loading_screen {
     background-color: rgb(27, 223, 216);
+}
+
+.container-request_list_items {
+    margin: 1vh 0;
+    background-color: red;
 }

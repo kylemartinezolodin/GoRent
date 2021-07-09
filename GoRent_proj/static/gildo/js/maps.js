@@ -33,7 +33,9 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
 }).addTo(map);
 
 // MARKER CODE
-L.marker([latitude, longitude]).addTo(map)
+markers.forEach(marker => {
+  marker.addTo(map)
+});
 
 // GEOSEARCH
 geocoder = L.Control.Geocoder.nominatim()
@@ -71,8 +73,11 @@ geosearch_control.on('markgeocode', function(e) { // BOUNDING-BOX
   }
 
   console.log(e);
-  addPopupFromResult(map, e.geocode.center, e.geocode)
-  user_locate.location = e.geocode.center
+  if (user_flag == false) {
+    addPopupFromResult(map, e.geocode.center, e.geocode)
+    user_locate.location = e.geocode.center
+    user_locate.address = e.geocode.name
+  }
 });
 
 map.on('click', function(e) { // DISPLAY LOCATION ON CLICK
@@ -80,8 +85,9 @@ map.on('click', function(e) { // DISPLAY LOCATION ON CLICK
     geocoder.reverse(e.latlng, map.options.crs.scale(map.getZoom()), function(results) {
       result = results[0]; // THE "result" VARIABLE IS A geocode OBJECT
       addPopupFromResult(map, e.latlng, result)
-
+      
       user_locate.location = e.latlng
+      user_locate.address = result.name
       toggleMapLocate()
       
       console.log(geolocate_marker.getLatLng())
@@ -98,6 +104,7 @@ function showLocation(position) {
     addPopupFromResult(map, position, result, "You are here: <br>")
 
     user_locate.location = position
+    user_locate.address = result.name
 
     console.log(geolocate_marker.getLatLng())
   });
