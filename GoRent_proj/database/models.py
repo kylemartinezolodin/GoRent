@@ -1,13 +1,12 @@
 from django.db import models
+from django.utils import timezone
 
 class RentOwner(models.Model):
     email = models.EmailField(primary_key=True, max_length=254)
     password = models.CharField(max_length = 100)
     firstname = models.CharField(max_length = 50)
     lastname = models.CharField(max_length = 50)
-    birthday = models.DateField()
     contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
-    occupation = models.CharField(max_length = 50, null = True)
     class Meta:
         db_table = "RentOwner"
 
@@ -17,7 +16,7 @@ class RentOwner(models.Model):
 class Space(models.Model):
     id = models.AutoField(primary_key=True)
     coordinates = models.CharField(max_length = 10)
-    owner = models.ForeignKey(db_column = 'owner', to = 'database.RentOwner', on_delete = models.SET_NULL, null = True)
+    owner = models.ForeignKey(db_column = 'owner', to = 'database.RentOwner', on_delete = models.CASCADE, null = True) # IT CAN BE NULL ESPECIALLY WHEN A SHAREE REGISTERS THE SPACE WITHOUT THE LANDLORD REGISTERED IN GoRent
     address = models.CharField(max_length = 100)
     price = models.DecimalField(null = True, max_digits = 6, decimal_places = 2)
 
@@ -32,8 +31,8 @@ class SpaceImage(models.Model):
     id = models.AutoField(primary_key=True)
     path = models.CharField(max_length = 100)
     space = models.ForeignKey(db_column = 'space', to = 'database.Space', on_delete = models.CASCADE)
-    title = models.CharField(max_length = 100)
-    caption = models.CharField(max_length = 100)
+    title = models.CharField(max_length = 100, null = True)
+    caption = models.CharField(max_length = 100, null = True)
 
     class Meta:
         db_table = "Images"
@@ -47,8 +46,8 @@ class Sharee(models.Model):
     password = models.CharField(max_length = 100)
     firstname = models.CharField(max_length = 50)
     lastname = models.CharField(max_length = 50)
-    birthday = models.DateField()
     contactnumber = models.CharField(max_length = 13)  # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
+    space = models.ForeignKey(db_column = 'space', to = 'database.Space', on_delete = models.CASCADE, null = True)
 
     class Meta:
         db_table = "Sharee"
@@ -56,16 +55,30 @@ class Sharee(models.Model):
     def __str__(self):
         return "[" +self.email +"] " +self.lastname +" (Sharee)"
 
-# MAG BUHAT PAKO OG RentOwnerRenteeRequest OG ShareeRenteeRequest
-class RenteeRequest(models.Model):
+class RentOwnerRenteeRequest(models.Model):
     email = models.EmailField(primary_key=True, max_length=254)
     firstname = models.CharField(max_length = 50)
     lastname = models.CharField(max_length = 50)
     contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
-    occupation = models.CharField(max_length = 50, null = True)
+    rentowner = models.ForeignKey(db_column = 'rentowner', to = 'database.RentOwner', on_delete = models.CASCADE)
+    requestdate = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        db_table = "RenteeRequest"
+        db_table = "RentOwnerRenteeRequest"
 
     def __str__(self):
-        return "[" +self.email +"] " +self.firstname +" (Rentee)"
+        return "[" +self.email +"] " +self.firstname +" (RenteeRequest -> RentOwner) " +"[" +self.RentOwner +"] "
+        
+class ShareeRenteeRequest(models.Model):
+    email = models.EmailField(primary_key=True, max_length=254)
+    firstname = models.CharField(max_length = 50)
+    lastname = models.CharField(max_length = 50)
+    contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
+    sharee = models.ForeignKey(db_column = 'sharee', to = 'database.Sharee', on_delete = models.CASCADE)
+    requestdate = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        db_table = "ShareeRenteeRequest"
+
+    def __str__(self):
+        return "[" +self.email +"] " +self.firstname +" (RenteeRequest -> Sharee) " +"[" +self.Sharee +"] "
