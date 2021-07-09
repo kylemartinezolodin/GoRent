@@ -67,7 +67,7 @@ class GoRentOwnerRegisterPage(View):
 		birthdate = request.POST.get("birthdate")
 		occupation = request.POST.get("occupation")
 		
-		obj = RentOwner(email = email, firstname = firstName, lastname = lastName, password = password, contactnumber = mobileNumber, birthday = birthdate, occupation = occupation)
+		obj = RentOwner(email = email, firstname = firstName, lastname = lastName, password = password, contactnumber = mobileNumber)
 		obj.save()
 		return redirect('registers:loginOwner_view')
 
@@ -82,7 +82,7 @@ class GoRentShareeRegisterPage(View):
 		shareeMobileNumber = request.POST.get("mobileNumber")
 		shareeBirthdate = request.POST.get("birthdate")
 		
-		obj = Sharee(email = shareeEmail, firstname = shareeFirstName, lastname = shareeLastName, password = shareePassword, contactnumber = shareeMobileNumber, birthday = shareeBirthdate)
+		obj = Sharee(email = shareeEmail, firstname = shareeFirstName, lastname = shareeLastName, password = shareePassword, contactnumber = shareeMobileNumber)
 		obj.save()
 		return redirect('registers:loginSharee_view')
 
