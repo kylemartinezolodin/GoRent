@@ -95,31 +95,45 @@ a:hover{
     background-color: transparent;
     text-decoration: underline;
 }
-
+p{
+    font-family: verdana,sans-serif;
+    text-align: center;
+    color: red;
+    font-size: 20px ;
+    border-radius: 25px;
+    background:  white;
+    border: 4px solid darkgreen;
+    padding: 5px; 
+    width: 500px;
+    height: auto;
+}
 
   </style>
 {% endblock headerinclude %}
 
 <div class="backgroundBody" style="background-image: url({% static 'registers/img/OwnerLogIn.png' %});"> <!-- used to be <body> -->
-
    <div class="logoGoRent">
             <img src="{% static 'registers/img/gorent_icon.png' %}" style="margin-left: 10%;">
             <img src="{% static 'registers/img/gorent_plain.png' %}">
       </div>
       
 
-  <form class="" id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data">
+  <form class="" id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data" data-validate-url="{% url 'registers:loginOwner_view' %}">
       {% csrf_token %}
       <div class="logContainerIn"> <!--container class-->
-
+         {% if popUpFlag %}
+              <div id="popUpFlag" title="Flag">
+                  <p style="float:center" >Incorrect Email or Password</p>
+              </div>
+            {% endif %}
         <label for="username">Email</label> <!--username-->
             <input type="email" id="roundedIP" name="username" required="email">
 
         <label for="password">Password</label><!--password-->
-            <input type="password" id="roundedIP" name="password" required="password" minlength="8">
+            <input type="password" id="roundedIP" name="password" required="password">
 
 
-        <button type="submit" name="btnLoginOwner">Login</button> <!--submit button-->
+        <button type="submit" name="btnLoginOwner" id="login">Login</button> <!--submit button-->
 
        <div class="labelText">
            <label style="margin-left:28%">Not an Owner yet?</label>
@@ -130,5 +144,49 @@ a:hover{
   </form>
 
 </div>
+{% block javascript %}
+      <script>
+        $("#login").change(function () {
+          var loginForm = $(this).closest("form");
+          $.ajax({
+            url:loginForm.attr("data-validate-url"),
+            method: "POST",
+            data:loginForm.serialize(),
+            dataType:'json',
+            success:function(errorLoginOwner){
+                if(errorLoginOwner.is_emailTaken){
+                    alert(errorLoginOwner.error_loginOwner);
+                }
+                alert(errorLoginOwner.error_loginOwner);
+            }
+          });
+        });
+      </script>
 
 
+<script>
+        $(document).ready(function() {
+            $(function() {
+                $( "#popUpFlag" ).dialog({
+                    modal: true,
+                    closeOnEscape: false,
+                    dialogClass: "no-close",
+                    resizable: false,
+                    draggable: false,
+                    width: 600,
+                    buttons: [
+                        {
+                            text: "OK",
+                            click: function() {
+                            $( this ).dialog( "close" );
+                            }
+                        }
+                    ]
+                });
+            });
+        });
+    </script>
+
+{% endblock %}
+{% block footerinclude %}
+{% endblock footerinclude %}

@@ -9,7 +9,7 @@
 <script src="{% static 'registers/js/bootstrap.min.js' %}" type="text/javascript"></script>
 <script src="{% static 'registers/js/jquery.bootstrap.wizard.js' %} " type="text/javascript"></script>
 <script src="{% static 'registers/js/jquery.validate.min.js' %}"></script>
-
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <style>
     
 .backgroundBody{
@@ -36,7 +36,7 @@
   transform: translate(-50%,-50%);
   }
 
-#roundedIP{
+.roundedIP{
     border-radius: 25px;
     background:  #eecc76;
     border: 2px solid #ad9258;
@@ -117,7 +117,8 @@ input.invalid {
 }
 
   </style>
-{% endblock headerinclude %}    <!-- START OF CODE HERE -->
+
+{% endblock headerinclude %}  <!-- START OF CODE HERE -->
 
       <div class="backgroundBody" style="background-image: url({% static 'registers/img/ownerRegisterPage.png' %});">
 
@@ -127,26 +128,25 @@ input.invalid {
             </div>
             
         <div class="logContainer"> <!--container class-->
-              <form id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data">
+              <form id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data" data-validate-url="{% url 'registers:OwnerRegister_view'%}">
                 {% csrf_token %}
                 <!-- 1st step -->
                 <div class="tab">
                 <label for="firstName">First Name</label> <!--username-->
-                <input type="text" id="roundedIP" name="firstName">
+                <input type="text" class="roundedIP" id="firstName" name="firstName">
             
                 
                 <label for="lastName">Last Name</label> <!--Last name-->
-                <input type="text" id="roundedIP" name="lastName">
+                <input type="text" class="roundedIP" id="lastName" name="lastName">
                 
                 
                 <label for="Email">Email</label> <!--email-->
-                <input type="email" id="roundedIP" name="email" required="email">
+                <input type="email" class="roundedIP" id="email" name="email" required="email">
 
-               
-                
+
                 <label for="password">Password</label> <!--password-->
                 <div class="form-group">
-                  <input type="password" id="roundedIP" class="form-control" name="password" required="password" minlength="8">
+                  <input type="password" class="roundedIP" name="password" required="password" minlength="8">
                 </div>
 
                 </div>
@@ -154,14 +154,11 @@ input.invalid {
                 <div class="tab">
                 
                 <label for="mobileNumber">Mobile Number</label> <!--mobile number-->
-                <input type="text" id="roundedIP" name="mobileNumber">
+                <input type="text" class="roundedIP" name="mobileNumber" id="mobileNumber">
                 
                
                 <label for="Birthdate">Birthdate</label> <!--Birthdate-->
-                <input type="date" id="roundedIP" name="birthdate">
-
-                <label for="Occupation">Occupation</label> <!--Occupation-->
-                <input type="text" id="roundedIP" name="occupation">
+                <input type="date" class="roundedIP" name="birthdate">
                 </div>
 
                   <div style="overflow:auto;">
@@ -178,11 +175,28 @@ input.invalid {
             </form>
           </div>
 
+{% block javascript %}
+      <script>
+        $("#email").change(function () {
+           var emailForm = $(this).closest("form");
+           var emailForm2 = document.querySelector("#email").value;
+          console.log("hello")
+          $.ajax({
+            url: '/GoRent/Owner/Register',
+            method: "POST",
+            headers: {"X-CSRFToken":"{{ csrf_token }}"},
+            data:JSON.stringify({'checkemail':emailForm2}),
+            dataType:'json',
+            success:function(emailData){
+              if(emailData.is_emailTaken){
+                alert(emailData.error_messageEmail);
+              }
+            }
+          });
+        });
 
+      </script>
 
-
-{% block footerinclude %}
-{% endblock footerinclude %}
 <script>
 var currentTab = 0; // Current tab is set to be the first tab (0)
 showTab(currentTab); // Display the current tab
@@ -272,3 +286,8 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
     </script>
+
+    {% endblock %}
+
+{% block footerinclude %}
+{% endblock footerinclude %}
