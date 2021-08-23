@@ -4,7 +4,7 @@
         <title>GoRent</title>
        <link href="{% static 'registers/css/bootstrap.min.css' %}" rel="stylesheet">
        <link href="{% static 'registers/css/gsdk-bootstrap-wizard.css' %}" rel="stylesheet">
-
+       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <style>
     
 .backgroundBody{
@@ -31,7 +31,7 @@
   transform: translate(-50%,-50%);
   }
 
-#roundedIP{
+.roundedIP{
     border-radius: 25px;
     background:  #eecc76;
     border: 2px solid #ad9258;
@@ -120,28 +120,28 @@ input.invalid {
                 <img src="{% static 'registers/img/gorent_icon.png' %}" style="margin-left: 10%;">
             <img src="{% static 'registers/img/gorent_plain.png' %}">
             </div>
-            
+          
         <div class="logContainer"> <!--container class-->
 
-            <form id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data">
+            <form id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data" data-validate-url="{% url 'registers:ShareeRegister_view'%}">
 
                 {% csrf_token %}
                 <!-- 1st step -->
                 <div class="tab">
                 <label for="firstName">First Name</label> <!--username-->
-                <input type="text" id="roundedIP" name="firstName">
+                <input type="text" class="roundedIP" name="firstName">
             
                 
                 <label for="lastName">Last Name</label> <!--Last name-->
-                <input type="text" id="roundedIP" name="lastName">
+                <input type="text" class="roundedIP" name="lastName">
                 
                 
                 <label for="Email">Email</label> <!--email-->
-                <input type="text" id="roundedIP" name="email">
+                <input type="text" class="roundedIP" name="email" id="email">
                
                 
                 <label for="password">Password</label> <!--password-->
-                <input type="password" id="roundedIP" name="password">
+                <input type="password" class="roundedIP" name="password" minlength="8">
                 
                 </div>
 
@@ -149,14 +149,11 @@ input.invalid {
                 <div class="tab">
                 
                 <label for="mobileNumber">Mobile Number</label> <!--mobile number-->
-                <input type="text" id="roundedIP" name="mobileNumber">
+                <input type="text" class="roundedIP" name="mobileNumber">
                 
                
                 <label for="Birthdate">Birthdate</label> <!--Birthdate-->
-                <input type="date" id="roundedIP" name="birthdate">
-
-                <label for="Occupation">Occupation</label> <!--Occupation-->
-                <input type="text" id="roundedIP" name="occupation">
+                <input type="date" class="roundedIP" name="birthdate">
                 </div>
 
                   <div style="overflow:auto;">
@@ -175,12 +172,28 @@ input.invalid {
             </div>
           </div>
 
+{% block javascript %}
+       <script>
+        $("#email").change(function () {
+           var shareeForm = $(this).closest("form");
+           var shareeForm2 = document.querySelector("#email").value;
+          console.log("hello")
+          $.ajax({
+            url: '/GoRent/Sharee/Register',
+            method: "POST",
+            headers: {"X-CSRFToken":"{{ csrf_token }}"},
+            data:JSON.stringify({'checkemail':shareeForm2}),
+            dataType:'json',
+            success:function(shareeEmailData){
+              if(shareeEmailData.is_shareeTaken){
+                alert(shareeEmailData.error_messageEmail);
+              }
+            }
+          });
+        });
 
+      </script>
 
-
-
-{% block footerinclude %}
-{% endblock footerinclude %}
 <!-- for drop down-->
 <script>
 var currentTab = 0; // Current tab is set to be the first tab (0)
@@ -268,3 +281,10 @@ function fixStepIndicator(n) {
   x[n].className += " active";
 }
     </script>
+
+    {% endblock %}
+
+
+
+{% block footerinclude %}
+{% endblock footerinclude %}
