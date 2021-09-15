@@ -18,10 +18,10 @@ class Space(models.Model):
     coordinates = models.CharField(max_length = 10)
     owner = models.ForeignKey(db_column = 'owner', to = 'database.RentOwner', on_delete = models.CASCADE, null = True) # IT CAN BE NULL ESPECIALLY WHEN A SHAREE REGISTERS THE SPACE WITHOUT THE LANDLORD REGISTERED IN GoRent
     address = models.CharField(max_length = 100)
-    price = models.DecimalField(null = True, max_digits = 6, decimal_places = 2)
+    price = models.DecimalField(max_digits = 6, decimal_places = 2)
 
     class Meta:
-        db_table = "Spaces"
+        db_table = "Space"
 
     def __str__(self):
         return "[" +self.id +"] " +self.coordinates

@@ -6,17 +6,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <link rel="stylesheet" href="{% static 'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
     <title>GoRent | Search</title>
     
-<!--
 
-Tooplate 2095 Level
-
-https://www.tooplate.com/view/2095-level
-
--->
     <!-- load stylesheets -->
     <link rel="stylesheet" href="{% static 'gildo/https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' %}">  <!-- Google web font "Open Sans" -->
     <link rel="stylesheet" href="{% static 'gildo/font-awesome-4.7.0/css/font-awesome.min.css' %}">                <!-- Font Awesome -->
@@ -34,16 +30,18 @@ https://www.tooplate.com/view/2095-level
     <!-- LEAFLET CSS (AND JS IT IS REQUIRED THAT JS SHOULD BE PUT AFTER THE CSS)-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" 
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/> <!-- BASE LEAFLET STYLES -->
-    <link rel="stylesheet" href="{% static 'js/leaflet/geosearch.js' %}">  <!-- LEAFLET COORDINATES STYLES -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/> <!-- LEAFLET GEOSEARCH STYLES -->
+    <link rel="stylesheet" href="js/leaflet/geosearch.js">  <!-- LEAFLET COORDINATES STYLES -->
+    <link rel="stylesheet" href="static 'https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/> <!-- LEAFLET GEOSEARCH STYLES -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin="">
-    </script><!-- BASE LEAFLET JS -->
+    </script>
+    
+    <!-- BASE LEAFLET JS -->
     <script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.umd.js"></script> <!-- LEAFLET ADD-ON GEOSEARCH JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" /> <!-- LEAFLET ADD-ON leaflet-control-geocoder STYLES -->
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> <!-- LEAFLET ADD-ON leaflet-control-geocoder JS -->
-    <script src="{% static 'js/leaflet/geosearch.js' %}"></script> <!-- LEAFLET ADD-ON leaflet-geoip JS -->
+    <script src="js/leaflet/geosearch.js"></script> <!-- LEAFLET ADD-ON leaflet-geoip JS -->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -71,29 +69,30 @@ https://www.tooplate.com/view/2095-level
                 
             </div> -->
 
-            <!-- <div class="tm-top-bar-bg"></div>
-            <div class="tm-top-bar" id="tm-top-bar"> -->
+            <div class="tm-top-bar-bg"></div>
+            <div class="tm-top-bar" id="tm-top-bar">
                 <!-- Top Navbar -->
                 <div class="container">
                     <div class="row">
                         
                         <nav class="navbar navbar-expand-lg narbar-light">
                             <a class="navbar-brand mr-auto" href="#">
-                                <img src="img/gorent_icon.png" alt="Site logo">
-                                <img src="img/gorent_plain.png" alt="Site logo">
+                                <img src="{% static 'img/gorent_icon.png' %}" alt="Site logo">
+                                <img src="{% static 'img/gorent_plain.png' %}" alt="Site logo">
                             </a>
                             <button type="button" id="nav-toggle" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#mainNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span class="navbar-toggler-icon"></span>
                             </button>
                             <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
                                 <ul class="navbar-nav ml-auto">
+
                                     <li class="nav-item">
-                                        <a class="nav-link" href="#top">About Us <span class="sr-only">(current)</span></a>
+                                        <a class="nav-link" href="{% url 'gildo:about_view' %}">About GoRent <span class="sr-only">(current)</span></a>
                                     </li>
 
                                     {% if user is None %} <!-- IF "user" EXIST IN CONTEXT -->
                                     <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'registers:about_view' %}">Register your space</a>
+                                        <a class="nav-link active" href="{% url 'registers:about_view' %}">Register your space</a>
                                     </li>
                                     {% else %}
                                     <li class="nav-item">
@@ -198,18 +197,27 @@ https://www.tooplate.com/view/2095-level
 
                 {% else %}
                 
-                    {% if type == "RentOwner" %}
+                
+
+                <!--REGISTER-->
+                {% if type == "RentOwner" %}
                 <div class="map-sidepanel-left">
-                    Add/Register Space
-                    <br>
-                    <button id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
-                    <button id="button-auto_locate"  onclick="getLocation()">Enable Location</button>
-                    <div id="location"></div>
+                    <h4><center>Register Space</center></h4>
+                    <button class="btn btn-sub" id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
+                    <button class="btn btn-sub" id="button-auto_locate"  onclick="getLocation()">Enable Location</button>
                     
-                    <button id="button-add_space_image" style="display:none">Add Image</button>
-                    <button id="button-submit_space" style="display:none">Submit</button>
+                    <br>
+                    <div class="subtext" id="location"></div>
+                    <div class="subtext" id="longitude"></div>
+                    <div class="subtext" id="latitude"></div>
+                    <br>
+                    <input name="price" type="number" class="form-control" id="price" placeholder="Price" style="height: 8%;">
+                    <br>
+                    Upload images<input type="file" id="spaceImage" name="spaceImage" accept="image/png, image/jpeg" placeholder="Upload image">
+                        <br>
+                        <button id="getData" type="submit" class="btn btn-primary tm-btn-search">Submit</button>
                 </div>
-                    {% endif %}
+                {% endif %}
 
                 <!-- NEARBY LIST BLOCK -->
                 <div class="map-sidepanel-right">
@@ -322,13 +330,17 @@ https://www.tooplate.com/view/2095-level
                     }
                     
                     function fillSpaceInfo () { // HAPPENS IF user_locate.location IS NO LONGER NULL
-                        document.querySelector("#location").innerHTML = "ANG ADDRESS KAY: " +user_locate.address +" NYA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA MAKA ADD OG SPACE"
-
+                        document.querySelector("#location").innerHTML = "Address: " +user_locate.address 
+                        // " Coordinates: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA MAKA ADD OG SPACE"
+                        document.querySelector('#longitude').innerHTML = "Longitude:" + user_locate.location.lng
+                        document.querySelector('#latitude').innerHTML = "Latitude:" + user_locate.location.lat
                         document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
                         document.querySelector("#button-auto_locate").style.display = "none"
                         document.querySelector("#button-submit_space").style.display = "block"
                         document.querySelector("#button-add_space_image").style.display = "block"
                     }
+
+                    
 
                     function toggleLoadingScreen () { // WALA PA GI GAMIT KAY MURAG MO CAUSE OG PROBLEM, ANYWAY AESTHETICS RAMNSAD NI NGA FUNCTIONALITIES
                         loading_screen = document.querySelector("#container-nearby_list_loading_screen")
@@ -341,6 +353,27 @@ https://www.tooplate.com/view/2095-level
                             document.querySelector("#container-nearby_list").style.display = "block"
                         }
                     }
+
+                    $("#getData").click(function(){
+                        price = document.querySelector('#price').value
+                        lat = document.querySelector('#latitude').innerHTML 
+                        long = document.querySelector('#longitude').innerHTML 
+                        loc = document.querySelector("#location").innerHTML
+                        $.ajax({
+                            url: "{% url 'gildo:main_view' %}",
+                            headers: {"X-CSRFToken": "{{csrf_token}}"},
+                            type: "post",
+                            data: JSON.stringify({"Coordinates": lat + ", " + long, "Address":loc, "Price":price}),
+                            success: function (response) {
+
+                            // You will get response from your PHP page (what you echo or print)
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            }
+                        });
+                    });
+
 
                 </script>
             </div>
