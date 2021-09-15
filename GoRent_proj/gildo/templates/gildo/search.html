@@ -220,52 +220,26 @@
                 {% endif %}
 
                 <!-- NEARBY LIST BLOCK -->
+                
+                {% for item in sharee %}
                 <div class="map-sidepanel-right">
-                    Request List: (MGA LISTAHAN NGA GANAHAN MO AVAIL SA ILA SPACE)
+                    Request List:
                     <br>
                     <div id="container-request_list" class="container-request_list">
                         <div class="container-request_list_items">
                             <div>
-                                [Some User Image] [Firstname] [Lastname]
-                            </div>
-                            <div>
-                                Email: [Email] <br>
-                                Contact: [contact_number]
-                            </div>
-                            <button>Accept</button>
-                            <button>Reject</button>
-                            <br>
-                            (REQUEST KUNUHAY NI)
-                        </div>
-                        <div class="container-request_list_items">
-                            <div>
-                                [Some User Image] [Firstname] [Lastname]
-                            </div>
-                            <div>
-                                Email: [Email] <br>
-                                Contact: [contact_number]
+                                <p>Firstname: {{item.firstname}} </p>
+                                <p>Lastname: {{item.lastname}} </p>
+                                <p>Email: {{item.email}} </p>
+                                <p>Contact: {{item.contact}} </p>
                             </div>
                             <button>Accept</button>
                             <button>Reject</button>
                             <br>
-                            (REQUEST KUNUHAY NI)
-                        </div>
-                        <div class="container-request_list_items">
-                            <div>
-                                [Some User Image] [Firstname] [Lastname]
-                            </div>
-                            <div>
-                                Email: [Email] <br>
-                                Contact: [contact_number]
-                            </div>
-                            <button>Accept</button>
-                            <button>Reject</button>
-                            <br>
-                            (REQUEST KUNUHAY NI)
                         </div>
                     </div>
-
                 </div>
+                {% endfor%}
 
                 {% endif %}
 
@@ -323,6 +297,24 @@
 
                     function activateNearbyList () { // HAPPENS IF user_locate.location IS NO LONGER NULL
                         document.querySelector("#location").innerHTML = "ANG CURRENT NGA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA DISTANCE FORMULA"
+                        console.log("qweqwe")
+                        // console.log({{csrf_token}})
+                            $.ajax({
+                                url: "{% url 'gildo:main_view' %}",
+                                type: "post",
+                                headers: {
+                                'X-CSRFToken':'{{csrf_token}}',
+                                
+                                },
+                                data: JSON.stringify({"latitude": user_locate.location.lat, "longitude": user_locate.location.lng}),
+                                
+                                success: function (response) {
+                                console.log(response)// You will get response from your PHP page (what you echo or print)
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                console.log(textStatus, errorThrown);
+                                }
+                            });
 
                         document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
                         document.querySelector("#button-auto_locate").style.display = "none"

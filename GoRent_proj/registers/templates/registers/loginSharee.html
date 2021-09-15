@@ -95,7 +95,18 @@ a:hover{
     background-color: transparent;
     text-decoration: underline;
 }
-
+p{
+    font-family: verdana,sans-serif;
+    text-align: center;
+    color: red;
+    font-size: 20px ;
+    border-radius: 25px;
+    background:  white;
+    border: 4px solid darkgreen;
+    padding: 5px; 
+    width: 500px;
+    height: auto;
+}
 
   </style>
 {% endblock headerinclude %}
@@ -111,7 +122,11 @@ a:hover{
   <form class="" id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data">
       {% csrf_token %}
       <div class="logContainerIn"> <!--container class-->
-
+        {% if popUpFlag %}
+              <div id="popUpFlag" title="Flag">
+                  <p style="float:center" >Incorrect Email or Password</p>
+              </div>
+            {% endif %}
         <label for="username">Email</label> <!--username-->
             <input type="email" id="roundedIP" name="username" required="email">
 
@@ -132,3 +147,49 @@ a:hover{
 </div>
 
 
+{% block javascript %}
+      <script>
+        $("#login").change(function () {
+          var loginForm = $(this).closest("form");
+          $.ajax({
+            url:loginForm.attr("data-validate-url"),
+            method: "POST",
+            data:loginForm.serialize(),
+            dataType:'json',
+            success:function(errorLoginOwner){
+                if(errorLoginOwner.is_emailTaken){
+                    alert(errorLoginOwner.error_loginOwner);
+                }
+                alert(errorLoginOwner.error_loginOwner);
+            }
+          });
+        });
+      </script>
+
+
+<script>
+        $(document).ready(function() {
+            $(function() {
+                $( "#popUpFlag" ).dialog({
+                    modal: true,
+                    closeOnEscape: false,
+                    dialogClass: "no-close",
+                    resizable: false,
+                    draggable: false,
+                    width: 600,
+                    buttons: [
+                        {
+                            text: "OK",
+                            click: function() {
+                            $( this ).dialog( "close" );
+                            }
+                        }
+                    ]
+                });
+            });
+        });
+    </script>
+
+{% endblock %}
+{% block footerinclude %}
+{% endblock footerinclude %}

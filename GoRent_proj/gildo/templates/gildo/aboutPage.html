@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <link rel = "icon" href = "{% static 'img/gorent_icon.png' %}" type = "image/png"> 
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <title>Welcome to GoRent!</title>
+
+    <!-- load stylesheets -->
+    <link rel="stylesheet" href="{% static 'gildo/https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,70' %}">  <!-- Google web font "Open Sans" -->
+    <link rel="stylesheet" href="{% static 'gildo/font-awesome-4.7.0/css/font-awesome.min.css' %}">                <!-- Font Awesome -->
+    <link rel="stylesheet" href="{% static 'gildo/css/bootstrap.min.css' %}">                                      <!-- Bootstrap style -->
+    <link rel="stylesheet" type="text/css" href="{% static 'gildo/slick/slick.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'gildo/slick/slick-theme.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'gildo/css/datepicker.css' %}"/>
+    <link rel="stylesheet" href="{% static 'gildo/css/main-style.css' %}">
+
+</head>
+
+    <body>
+        <div class="tm-main-content" id="top">
+            <div class="tm-top-bar-bg"></div>
+            <div class="tm-top-bar" id="tm-top-bar">
+                <!-- Top Navbar -->
+                <div class="container">
+                    <div class="row">
+                        
+                        <nav class="navbar navbar-expand-lg narbar-light">
+                            <a class="navbar-brand mr-auto" href="#">
+                                <img src="{% static 'img/gorent_icon.png' %}" alt="Site logo">
+                                <img src="{% static 'img/gorent_plain.png' %}" alt="Site logo">
+                            </a>
+                            <button type="button" id="nav-toggle" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
+                                <ul class="navbar-nav ml-auto">
+                                    
+                                  <li class="nav-item">
+                                    <a class="nav-link active" href="#tm-section-2">About GoRent</a>
+                                  </li>
+                                  {% if user is None %}
+                                  <li class="nav-item">
+                                    {% else %}
+                                    <a class="nav-link" href="settings.html">{{user.fistname}}</a>
+                                  </li>
+                                  {% endif %}
+                                  <li class="nav-item">
+                                    <a class="nav-link" href="{% url 'registers:logout_view' %}">logout</a>
+                                  </li>
+                                  
+                                </ul>
+                            </div>                            
+                        </nav>            
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="tm-section-2">
+                <div class="container">
+                    <div class="row">
+                        <div class="col text-center">
+                            <h2 class="tm-section-title">Welcome to GoRent!</h2>
+                            <p class="tm-color-white tm-section-subtitle">Your helper in finding and listing rentable rooms in Cebu City.</p>
+                            <a href="{% url 'registers:about_view' %}" class="tm-color-white tm-btn-white-bordered">Let's Go!</a>
+                        </div>                
+                    </div>
+                </div>        
+            </div>
+            
+            <div class="tm-section tm-position-relative">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="tm-section-down-arrow">
+                    <polygon fill="#037013" points="0,0  100,0  50,60"></polygon>                   
+                </svg> 
+                <div class="container tm-pt-5 tm-pb-4">
+                    <div class="row text-center">
+                        <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
+                            <i class="fa tm-fa-6x fa-home tm-color-primary tm-margin-b-20"></i>
+                            <h3 class="tm-color-primary tm-article-title-1">Become a Rentee, Sharee, or Rent Owner</h3>
+                            <p>Find an apartment or boarding house room around Cebu City or list your own place for rent.</p>
+                            </article>
+                        <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                            
+                            <i class="fa tm-fa-6x fa-dollar tm-color-primary tm-margin-b-20"></i>
+                            <h3 class="tm-color-primary tm-article-title-1">Be Notified of Monthly Rent Dues and Pay Cashless</h3>
+                            <p>Never miss a deadline with up-to-date notifications and pay via online transactions.</p>
+                            </article>
+                        <article class="col-sm-12 col-md-4 col-lg-4 col-xl-4 tm-article">                           
+                            <i class="fa tm-fa-6x fa-check-circle tm-color-primary tm-margin-b-20"></i>
+                            <h3 class="tm-color-primary tm-article-title-1">Post A Review About Your Stay.</h3>
+                            <p>Let other Rentees know if you recommend the place for their great services.</p>                        
+                        </article>
+                    </div>        
+                </div>
+            </div>
+
+            <div class="tm-position-relative">
+            	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none" class="tm-section-down-arrow">
+                    <polygon fill="#ffffff" points="0,0  100,0  50,60"></polygon>                   
+                </svg> 
+            </div>
+            
+            <div class="tm-section tm-bg-img" id="tm-section-1">
+                <div class="tm-bg-white ie-container-width-fix-2">
+                    <div class="container ie-h-align-center-fix">
+                        <div class="row">
+                            <div class="col-xs-12 ml-auto mr-auto ie-container-width-fix">
+                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xl-7">
+                                    <div id="google-map"></div>        
+                                </div>
+                                <form action="index.html" method="get" class="tm-search-form tm-section-pad-2">
+                                    <div class="form-row tm-search-form-row">
+                                        <div class="form-group tm-form-element tm-form-element-2">
+                                            <i class="fa fa-map-marker fa-2x tm-form-element-icon"></i>
+                                            <input name="location" type="text" class="form-control" id="inputLocation" placeholder="Location...">
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="tm-bg-primary">
+                <div class="container">
+                    <div class="row">
+                        <p class="col-sm-12 text-center tm-font-light tm-color-white p-4 tm-margin-b-0">
+                        Copyright &copy; <span class="tm-current-year">2021</span> PauerOf2
+                        
+                        <!-- - Design: <a rel="nofollow" href="https://www.tooplate.com" class="tm-color-primary tm-font-normal" target="_parent">Tooplate</a></p>         -->
+                    </div>
+                </div>                
+            </footer>
+        </div>
+        
+        <!-- load JS files -->
+        <script src="js/jquery-1.11.3.min.js"></script>             <!-- jQuery (https://jquery.com/download/) -->
+        <script src="js/popper.min.js"></script>                    <!-- https://popper.js.org/ -->       
+        <script src="js/bootstrap.min.js"></script>                 <!-- https://getbootstrap.com/ -->
+        <script src="js/datepicker.min.js"></script>                <!-- https://github.com/qodesmith/datepicker -->
+        <script src="js/jquery.singlePageNav.min.js"></script>      <!-- Single Page Nav (https://github.com/ChrisWojcik/single-page-nav) -->
+        <script src="slick/slick.min.js"></script>                  <!-- http://kenwheeler.github.io/slick/ -->
+       
+
+            
+
+</body>
+</html>
