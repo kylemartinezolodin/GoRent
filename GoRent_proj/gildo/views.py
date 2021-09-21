@@ -2,8 +2,10 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
+
 #from .forms import *
 from database.models import *
+from .controller import *
 
 import json
 	
@@ -55,8 +57,17 @@ class GoRentMainView(View):
 		return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type})
 
 	def post(self, request):
-		nearby = json.loads(request.body)
-		print(nearby["longitude"])
+		request = json.loads(request.body)
+
+		if request["ajaxAction"] == "addressValidation":
+			isValid = GoRentMapSearch..isAdressValid(request["address"])
+			return JsonResponse({'isValid':isValid})
+
+		elif request["ajaxAction"] == "addressValidation":
+			isValid = GoRentMapSearch..isCoordinatesValid(request["coord"])
+			return JsonResponse({'isValid':isValid})
+
+
 		return JsonResponse({'foo':'bar'})
 
 		
