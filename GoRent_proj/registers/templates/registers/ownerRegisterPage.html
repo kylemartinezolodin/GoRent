@@ -177,6 +177,7 @@ input.invalid {
 
 {% block javascript %}
       <script>
+        var error_code;
         $("#email").change(function () {
            var emailForm = $(this).closest("form");
            var emailForm2 = document.querySelector("#email").value;
@@ -185,19 +186,24 @@ input.invalid {
             url: '/GoRent/Owner/Register',
             method: "POST",
             headers: {"X-CSRFToken":"{{ csrf_token }}"},
-            data:JSON.stringify({'checkemail':emailForm2}),
+            data:JSON.stringify({'ajaxAction':'validateEmail','checkemail':emailForm2}),
             dataType:'json',
-            success:function(emailData){
-              if(emailData.is_emailTaken){
-                alert(emailData.error_messageEmail);
+            success: function(emailData){
+              error_code = emailData.error_code;
+              if(emailData.error_code = 1){
+                alert("A user with this email already exists.");
               }
+
             }
           });
         });
-
-      </script>
-
-<script>
+        // $("#email").(function () {
+        //     $("email").focus()
+        //     if(error_code = 1){
+        //         alert("A user with this email already exists.");
+        //       }
+        //  });
+  
 var currentTab = 0; // Current tab is set to be the first tab (0)
 showTab(currentTab); // Display the current tab
 
@@ -221,22 +227,29 @@ function showTab(n) {
 }
 
 function nextPrev(n) {
-  // This function will figure out which tab to display
-  var x = document.getElementsByClassName("tab");
-  // Exit the function if any field in the current tab is invalid:
-  if (n == 1 && !validateForm()) return false;
-  // Hide the current tab:
-  x[currentTab].style.display = "none";
-  // Increase or decrease the current tab by 1:
-  currentTab = currentTab + n;
-  // if you have reached the end of the form... :
-  if (currentTab >= x.length) {
-    //...the form gets submitted:
-    document.getElementById("form1").submit();
-    return false;
+
+  if (error_code == 0){
+    // This function will figure out which tab to display
+    var x = document.getElementsByClassName("tab");
+    // Exit the function if any field in the current tab is invalid:
+    if (n == 1 && !validateForm()) return false;
+    // Hide the current tab:
+    x[currentTab].style.display = "none";
+    // Increase or decrease the current tab by 1:
+    currentTab = currentTab + n;
+    // if you have reached the end of the form... :
+    if (currentTab >= x.length) {
+      //...the form gets submitted:
+      document.getElementById("form1").submit();
+      return false;
+    }
+    // Otherwise, display the correct tab:
+    showTab(currentTab);
   }
-  // Otherwise, display the correct tab:
-  showTab(currentTab);
+  else if(error_code == 1){
+    document.querySelector("#email").focus()
+    alert("A user with this email already exists.");
+  }
 }
 
 function validateForm() {
@@ -284,6 +297,30 @@ function fixStepIndicator(n) {
   }
   //... and adds the "active" class to the current step:
   x[n].className += " active";
+}
+
+//email validation using regex
+
+function validate() {
+  const $result = $("#result");
+  const email = $("#email").val();
+  $result.text("");
+
+  if (validateEmail(email)) {
+    $result.text(email + " is valid :)");
+    $result.css("color", "green");
+  } else {
+    $result.text(email + " is not valid :(");
+    $result.css("color", "red");
+  }
+  return false;
+}
+
+$("#email").on("input", validate);
+
+function validateEmail(email) {
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
 }
     </script>
 
