@@ -127,4 +127,6 @@ class GoRentLogoutPage(View):
 class GoRentAboutPage(View):
 	def get(self, request):
 		return render(request, 'registers/landingPage.html')
+
+
 		

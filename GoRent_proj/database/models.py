@@ -18,14 +18,26 @@ class Space(models.Model):
     coordinates = models.CharField(max_length = 10)
     owner = models.ForeignKey(db_column = 'owner', to = 'database.RentOwner', on_delete = models.CASCADE, null = True) # IT CAN BE NULL ESPECIALLY WHEN A SHAREE REGISTERS THE SPACE WITHOUT THE LANDLORD REGISTERED IN GoRent
     address = models.CharField(max_length = 100)
-    price = models.DecimalField(null = True, max_digits = 6, decimal_places = 2)
+    price = models.DecimalField(max_digits = 6, decimal_places = 2)
 
     class Meta:
-        db_table = "Spaces"
+        db_table = "Space"
 
     def __str__(self):
         return "[" +self.id +"] " +self.coordinates
 
+class SpaceRoommates(models.Model):
+    id = models.AutoField(primary_key=True)
+    firstname = models.CharField(max_length = 50)
+    lastname = models.CharField(max_length = 50)
+    space = models.ForeignKey(db_column = 'space', to = 'database.Space', on_delete = models.CASCADE, null = True)
+    contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
+    
+    class Meta:
+            db_table = "Roommates"
+            
+    def __str__(self):
+        return 
 
 class SpaceImage(models.Model):
     id = models.AutoField(primary_key=True)
