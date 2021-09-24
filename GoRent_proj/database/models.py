@@ -26,6 +26,18 @@ class Space(models.Model):
     def __str__(self):
         return "[" +self.id +"] " +self.coordinates
 
+class SpaceRoommates(models.Model):
+    id = models.AutoField(primary_key=True)
+    firstname = models.CharField(max_length = 50)
+    lastname = models.CharField(max_length = 50)
+    space = models.ForeignKey(db_column = 'space', to = 'database.Space', on_delete = models.CASCADE, null = True)
+    contactnumber = models.CharField(max_length = 13) # INPUT SHOULD ONLY BE IN +639 or 09 FORMAT
+    
+    class Meta:
+            db_table = "Roommates"
+            
+    def __str__(self):
+        return 
 
 class SpaceImage(models.Model):
     id = models.AutoField(primary_key=True)

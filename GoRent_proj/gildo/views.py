@@ -4,7 +4,10 @@ from django.http import HttpResponse, JsonResponse
 from django.views.generic import View
 #from .forms import *
 from database.models import *
+from registers.controller import *
+
 import json
+
 	
 # Create your views here.
 
@@ -20,6 +23,8 @@ class GoRentRentingView(View):
 	coordinates = None
 	address = None
 	price = None
+	firstname = None
+	lastname = None
 
 	def get(self, request):
 		user_object = None
@@ -60,9 +65,17 @@ class GoRentRentingView(View):
 		address = json_data['Address']
 		price = json_data['Price']
 		# json_data = json_data["data"]
+		firstname = request.POST.get("firstname")
+		lastname = request.POST.get("lastname")
+		contactnumber = request.POST.get("contactnumber")
 		print(json_data['Address'])
-		obj = Space(coordinates = coordinates, address = address, price = price)
-		obj.save()
+		
+		classObj = GoRentRegisterSpace(coordinates, address, price)
+		classObj.registerSpace()
+
+		asdasd = GoRentRegisterSpace(firstname, lastname)
+		asdasd.addRoommate()
+		
 		return render(request, 'gildo/search.html')
 
 	# def addRoommates #add the functions from SRS

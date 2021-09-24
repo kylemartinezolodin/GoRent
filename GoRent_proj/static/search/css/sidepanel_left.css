@@ -1,10 +1,12 @@
 .map-sidepanel-left {
-    height: 40vh;
-    width: 20vw;
+    height: 60vh;
+    width: 25vw;
     position: absolute;
-    left: 0;
-    bottom: 2.5vh;
-
+    top: 20vh;
+    left: 5vh;
     z-index: 1000;
-    background-color: rgb(255, 128, 149);
+    background-color: forestgreen;
+    border-radius: 25px;
+    padding: 20px 25px;
+    opacity: 0.95;
 }

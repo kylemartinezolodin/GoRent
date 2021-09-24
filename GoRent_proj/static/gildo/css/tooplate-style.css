@@ -77,7 +77,7 @@ p {
 .navbar a { color: black; }
 
 .navbar-toggler-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(238, 80, 87, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 32 32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(3,112,19,1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 8h24M4 16h24M4 24h24'/%3E%3C/svg%3E");
 }
 
 .navbar-toggler { 
@@ -179,6 +179,16 @@ p {
 	padding: 0.6rem 0.75rem;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 .form-control:focus {
 	border-color: #037013;
 	box-shadow: 0 0 0 0.2rem rgba(238,80,87,.25);
@@ -193,6 +203,13 @@ p {
 	font-weight: 600;
 	padding: 13px 30px;
 	text-transform: uppercase;
+	position: absolute;
+	bottom: 20px;
+	left: 80px;
+}
+
+.subtext {
+	color: white;
 }
 
 .btn-primary:hover,
@@ -200,6 +217,17 @@ p {
 .btn-primary:active {
 	background-color: #037013;
 	border-color: #037013;
+}
+
+.btn-sub{
+	background-color: #037013;
+	border-color: #037013;
+	color:white;
+	cursor: pointer;
+	font-size: 0.7rem;
+	font-weight: 600;
+	padding: 10px;
+	border-radius: 25px;
 }
 
 .tm-search-form .tm-form-element { padding: 0 5px; }
@@ -210,7 +238,7 @@ p {
 	color: #037013;
 	position: absolute;
 	top: 10px;
-	left: 15px;
+	right: 15px;
 }
 
 .tm-form-element-icon-small {
@@ -246,7 +274,7 @@ select.tm-select::-ms-expand { display: none; }
 .tm-search-form .tm-form-element { width: 33.3333%; }
 .tm-search-form .tm-form-element-2 { width: 25%; }
 .tm-search-form-row { width: 900px; }
-.tm-btn-search { width: 100%; }
+.tm-btn-search { width: 50%; }
 
 /* https://css-tricks.com/creating-non-rectangular-headers/ */
 .tm-section-down-arrow {
@@ -332,6 +360,8 @@ select.tm-select::-ms-expand { display: none; }
     text-align: center;
     margin-left: auto;
     margin-right: auto;
+
+    bottom: 8px;
     font-size: 0.75rem;
 }
 
@@ -589,7 +619,7 @@ video {
 	background-color: #0a6b46;
 	padding: 30px;
 	margin: auto;
-	text-align: center;
+	/* text-align: center; */
 	margin-bottom: 20px;
 	height: 50%;
     width: 100%;
