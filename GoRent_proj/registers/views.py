@@ -82,8 +82,14 @@ class GoRentOwnerRegisterPage(View):
 		if 'application/x-www-form-urlencoded; charset=UTF-8' in request.headers["Content-Type"]:
 			request = json.loads(request.body)
 			if request['ajaxAction'] == 'validateEmail':
-				emailData = {'error_code': registerController.emailValidator(request["checkemail"])}
+				emailData = {'error_code': registerController.emailValidator("RentOwner",request["checkemail"])}
 				return JsonResponse(emailData)
+			elif request['ajaxAction'] == 'validateContact':
+				contactData = {'error_code': registerController.contactNumberValidator("RentOwner",request["checkContact"])}
+				return JsonResponse(contactData)
+			elif request['ajaxAction'] == 'validatePassword':
+				passData = {'error_code': registerController.passwordValidator(request["checkPassword"])}
+				return JsonResponse(passData)
 		else:
 			self.firstname = request.POST.get("firstName")
 			self.lastname = request.POST.get("lastName")
@@ -95,6 +101,8 @@ class GoRentOwnerRegisterPage(View):
 
 			obj = RentOwner(email = self.email, firstname = self.firstname, lastname = self.lastname, password = self.password, contactnumber = self.mobileNumber)
 			obj.save()
+			#Space(coorasdadasd, qweoiqwe, owner = obj)
+			
 			return redirect('registers:loginOwner_view')
 
 class GoRentShareeRegisterPage(View):
@@ -108,11 +116,18 @@ class GoRentShareeRegisterPage(View):
 	def post (self,request):
 		print(request.headers)
 		print(str(request) + "asdadads")
+		registerController = GoRentRegister()
 		if 'application/x-www-form-urlencoded; charset=UTF-8' in request.headers["Content-Type"]:
 			request = json.loads(request.body)
-			shareeEmailData = {'is_shareeTaken': Sharee.objects.filter(email=request["checkemail"]).exists()}
-			shareeEmailData['error_messageEmail'] = 'A user with this email already exists.'	
-			return JsonResponse(shareeEmailData)
+			if request['ajaxAction'] == 'validateEmail':
+				emailData = {'error_code': registerController.emailValidator("Sharee",request["checkemail"])}
+				return JsonResponse(emailData)
+			elif request['ajaxAction'] == 'validateContact':
+				contactData = {'error_code': registerController.contactNumberValidator("Sharee",request["checkContact"])}
+				return JsonResponse(contactData)
+			elif request['ajaxAction'] == 'validatePassword':
+				passData = {'error_code': registerController.passwordValidator(request["checkPassword"])}
+				return JsonResponse(passData)
 		else:
 			self.firstname = request.POST.get("firstName")
 			self.lastname = request.POST.get("lastName")
@@ -126,7 +141,9 @@ class GoRentShareeRegisterPage(View):
 			# if shareeEmailData['is_shareeTaken']:
 			# 	return JsonResponse(shareeEmailData)
 			# else:
-			obj = Sharee(email = self.email, firstname = self.firstname, lastname = self.lastname, password = self.password, contactnumber = self.mobileNumber)
+			space_obj = Space(coord, asdasdjasidj)
+			space_obj.save()
+			obj = Sharee(space = space_obj, email = self.email, firstname = self.firstname, lastname = self.lastname, password = self.password, contactnumber = self.mobileNumber)
 			obj.save()
 			return redirect('registers:loginSharee_view')
 
