@@ -47,10 +47,10 @@ class GoRentLoginShareePage(View):
 
 		self.username = request.POST.get("username")
 		self.password = request.POST.get("password")
-		user_object = Sharee.objects.filter(email = username) 
+		user_object = Sharee.objects.filter(email = self.username) 
 		print(user_object)
 		
-		if(user_object.count() == 1 and user_object[0].password == password): # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
+		if(user_object.count() == 1 and user_object[0].password == self.password): # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
 			user_object = user_object[0]
 
 			# USING REDIRECT DOES NOT HAVE CONTEXT ARGUMENT THUS WE NEED TO USE SESSIONS
@@ -141,9 +141,11 @@ class GoRentShareeRegisterPage(View):
 			# if shareeEmailData['is_shareeTaken']:
 			# 	return JsonResponse(shareeEmailData)
 			# else:
-			space_obj = Space(coord, asdasdjasidj)
-			space_obj.save()
-			obj = Sharee(space = space_obj, email = self.email, firstname = self.firstname, lastname = self.lastname, password = self.password, contactnumber = self.mobileNumber)
+			# space_obj = Space(coord, asdasdjasidj)
+			# space_obj.save()
+			# obj = Sharee( email = self.email, firstname = self.firstname, lastname = self.lastname, password = self.password, contactnumber = self.mobileNumber)
+			# obj.save()
+			obj = Sharee(email = self.email, firstname = self.firstname, lastname = self.lastname, password = self.password, contactnumber = self.mobileNumber)
 			obj.save()
 			return redirect('registers:loginSharee_view')
 

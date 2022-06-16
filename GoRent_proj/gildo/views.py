@@ -32,7 +32,7 @@ class GoRentMainView(View):
 			self.user_password = request.session["user_password"]
 
 			if self.user_type == "RentOwner":
-				self.user_object = RentOwner.objects.filter(email = user_email)
+				self.user_object = RentOwner.objects.filter(email = self.user_email)
 				print("Filter result: " +str(self.user_object))
 				
 				if(self.user_object.count() == 1 and self.user_object[0].password == self.user_password): # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
