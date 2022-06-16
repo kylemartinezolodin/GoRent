@@ -16,38 +16,44 @@ class GoRentBillingView(View):
 		return render(request, 'gildo/Billing.html')
 			
 
-class GoRentRentingView(View):
-	def get(self, request):
-		user_object = None
-		user_type = "Rentee"
-		if "user_email" in request.session: # IF ACCESSED THROUGH
-			user_type = request.session["user_type"]
-			user_email = request.session["user_email"]
-			user_password = request.session["user_password"]
+class GoRentMainView(View):
+	user_object = None
+	user_type = "Rentee"
 
-			if user_type == "RentOwner":
-				user_object = RentOwner.objects.filter(email = user_email)
-				print("Filter result: " +str(user_object))
+	user_email = None
+	user_password = None
+
+	def get(self, request):
+		if "user_email" in request.session: # IF ACCESSED THROUGH
+			self.user_type = request.session["user_type"]
+			self.user_email = request.session["user_email"]
+			self.user_password = request.session["user_password"]
+
+			if self.user_type == "RentOwner":
+				self.user_object = RentOwner.objects.filter(email = user_email)
+				print("Filter result: " +str(self.user_object))
 				
-				if(user_object.count() == 1 and user_object[0].password == user_password): # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
-					user_object = user_object[0] # EXTRAC RENTOWNER OBJECT FROM LIST
-					print("User object: " +str(user_object))
+				if(self.user_object.count() == 1 and self.user_object[0].password == self.user_password): # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
+					self.user_object = self.user_object[0] # EXTRAC RENTOWNER OBJECT FROM LIST
+					print("User object: " +str(self.user_object))
+
 				rentowner = RentOwnerRenteeRequest.objects.all()
 				
-				return render(request, 'gildo/search.html', context={"user":user_object, "type":user_type, "rentowner":rentowner})
+				return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type, "rentowner":rentowner})
 			
 			else:
-				user_object = Sharee.objects.filter(email = user_email) 
-				print("Filter result: " +str(user_object))
+				self.user_object = Sharee.objects.filter(email = self.user_email) 
+				print("Filter result: " +str(self.user_object))
 
-				if(user_object.count() == 1 and user_object[0].password == user_password): # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
-					user_object = user_object[0] # EXTRAC RENTOWNER OBJECT FROM LIST
-					print("User object: " +str(user_object))
+				if(self.user_object.count() == 1 and self.user_object[0].password == self.user_password): # THIS KIND OF VALIDATION IS APPLICABLE WHEN USING objects.filter()
+					self.user_object = self.user_object[0] # EXTRAC RENTOWNER OBJECT FROM LIST
+					print("User object: " +str(self.user_object))
 				sharee = ShareeRenteeRequest.objects.all()
 				
-				return render(request, 'gildo/search.html', context={"user":user_object, "type":user_type, "sharee":sharee})
+				return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type, "sharee":sharee})
 		
-		return render(request, 'gildo/search.html', context={"user":user_object, "type":user_type})
+		return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type})
+
 	def post(self, request):
 		nearby = json.loads(request.body)
 		print(nearby["longitude"])
