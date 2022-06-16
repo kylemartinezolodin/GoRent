@@ -144,7 +144,7 @@ input.invalid {
 
                 <label for="password">Password</label> <!--password-->
                 <div class="form-group">
-                  <input type="password" class="roundedIP" name="password" required="password" id="password">
+                  <input type="password" class="roundedIP" name="password" required="password" id="password" required>
                 </div>
               
                 <label for="mobileNumber">Mobile Number</label> <!--mobile number-->
@@ -166,9 +166,9 @@ input.invalid {
 {% block javascript %}
       <script>
 
-        var emailError;
-        var contactError;
-        var passError;
+        var emailError = 0;
+        var contactError = 0;
+        var passError = 0;
         // EMAIL VALIDATOR
         $("#email").change(function () {
            var emailForm = $(this).closest("form");
@@ -285,6 +285,16 @@ function validate(n) {
   else if (contactError == 4) {
     document.querySelector("#mobileNumber").focus()
     alert("Invalid Contact Number")
+  }
+
+  else if (contactError == 0){
+     alert("Please provide Contact Number.")
+  }
+  else if (passError == 0){
+    alert("Please provide your password.")
+  }
+  else if (emailError == 0){
+    alert("Please provide your valid email")
   }
   else{
     document.getElementById("form1").submit();

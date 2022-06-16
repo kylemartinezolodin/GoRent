@@ -169,9 +169,9 @@ input.invalid {
           {% block javascript %}
           <script>
     
-            var emailError;
-            var contactError;
-            var passError;
+            var emailError = 0;
+            var contactError = 0;
+            var passError = 0;
             // EMAIL VALIDATOR
             $("#email").change(function () {
                var emailForm = $(this).closest("form");
@@ -289,11 +289,18 @@ input.invalid {
         document.querySelector("#mobileNumber").focus()
         alert("Invalid Contact Number")
       }
-      
+      else if (contactError == 0){
+        alert("Please provide Contact Number.")
+      }
+      else if (passError == 0){
+        alert("Please provide your password.")
+      }
+      else if (emailError == 0){
+        alert("Please provide your valid email")
+      }
       else{
         document.getElementById("form1").submit();
-
-
+        
         // // This function will figure out which tab to display
         // var x = document.getElementsByClassName("tab");
         // // Exit the function if any field in the current tab is invalid:

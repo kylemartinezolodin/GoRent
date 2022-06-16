@@ -15,7 +15,7 @@ class GoRentRegister():
 		self.email = email
 		emailRe = re.search(self.emailRegex,email)
 		print(email)
-		if emailRe is None:
+		if emailRe is None or email is None:
 			return 1
 		elif user_type == "RentOwner" and RentOwner.objects.filter(email = self.email).exists()==True: #if email already exist:
 			return 2
@@ -26,7 +26,7 @@ class GoRentRegister():
 		self.mobileNumber = contactnumber
 		contactRe = re.search(self.contactRegex, contactnumber)
 		if contactRe is None:
-			return 4 #if the mobile number is valid
+			return 4 #if the mobile number is invalid
 		elif user_type=="RentOwner" and RentOwner.objects.filter(contactnumber = self.mobileNumber).exists()==True: #if number exists
 			return 3 # if number exist
 		elif user_type=="Sharee" and Sharee.objects.filter(contactnumber = self.mobileNumber).exists()==True: #if number exists
@@ -35,7 +35,7 @@ class GoRentRegister():
 	def passwordValidator(self, password):
 		self.password = password
 		passRe = re.search(self.passRegex, password)
-		if passRe is None:
+		if passRe is None or password is None:
 			return 5
 
 class GoRentLogin():
