@@ -117,7 +117,6 @@ input.invalid {
 }
 
   </style>
-
 {% endblock headerinclude %}  <!-- START OF CODE HERE -->
 
       <div class="backgroundBody" style="background-image: url({% static 'registers/img/ownerRegisterPage.png' %});">
@@ -130,41 +129,30 @@ input.invalid {
         <div class="logContainer"> <!--container class-->
               <form id="form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data" data-validate-url="{% url 'registers:OwnerRegister_view'%}">
                 {% csrf_token %}
-                <!-- 1st step -->
-                <div class="tab">
-                <label for="firstName">First Name</label> <!--username-->
-                <input type="text" class="roundedIP" id="firstName" name="firstName">
-            
-                
+              <!-- 1st step -->
+                <label for="firstName">First Name</label> <!--First name-->
+                <input type="text" class="roundedIP" id="firstName" name="firstName" required>
+          
+              
                 <label for="lastName">Last Name</label> <!--Last name-->
-                <input type="text" class="roundedIP" id="lastName" name="lastName">
-                
-                
+                <input type="text" class="roundedIP" id="lastName" name="lastName" required> 
+              
+              
                 <label for="Email">Email</label> <!--email-->
                 <input type="email" class="roundedIP" id="email" name="email" required="email">
 
 
                 <label for="password">Password</label> <!--password-->
                 <div class="form-group">
-                  <input type="password" class="roundedIP" name="password" required="password" minlength="8">
+                  <input type="password" class="roundedIP" name="password" required="password" id="password">
                 </div>
-
-                </div>
-                <!-- 2nd step -->
-                <div class="tab">
-                
+              
                 <label for="mobileNumber">Mobile Number</label> <!--mobile number-->
-                <input type="text" class="roundedIP" name="mobileNumber" id="mobileNumber">
-                
-               
-                <label for="Birthdate">Birthdate</label> <!--Birthdate-->
-                <input type="date" class="roundedIP" name="birthdate">
-                </div>
+                <input type="text" class="roundedIP" name="mobileNumber" id="mobileNumber" required>
 
                   <div style="overflow:auto;">
                       <div style="float:right;">
-                        <button type="button" id="prevBtn" onclick="nextPrev(-1)" style="margin-left:-20%;">Previous</button>
-                        <button type="button" id="nextBtn" onclick="nextPrev(1)" >Next</button>
+                        <button type="button" onclick="validate()" >Submit</button>
                       </div>
                     </div>
                   <!--add another span for another tab-->
@@ -177,6 +165,11 @@ input.invalid {
 
 {% block javascript %}
       <script>
+
+        var emailError;
+        var contactError;
+        var passError;
+        // EMAIL VALIDATOR
         $("#email").change(function () {
            var emailForm = $(this).closest("form");
            var emailForm2 = document.querySelector("#email").value;
@@ -185,58 +178,175 @@ input.invalid {
             url: '/GoRent/Owner/Register',
             method: "POST",
             headers: {"X-CSRFToken":"{{ csrf_token }}"},
-            data:JSON.stringify({'checkemail':emailForm2}),
+            data:JSON.stringify({'ajaxAction':'validateEmail','checkemail':emailForm2}),
             dataType:'json',
-            success:function(emailData){
-              if(emailData.is_emailTaken){
-                alert(emailData.error_messageEmail);
-              }
+            success: function(emailData){
+              emailError = emailData.error_code;
+              // if(emailData.error_code = 1){
+              //   alert("Invalid Email");
+              //   console.log(emailData)
+              // }
+              // else if(emailData.error_code = 2){
+              //   alert("A user with this email already exists.");
+              // }
+
             }
           });
         });
+        // CONTACT NUMBER VALIDATOR
+         $("#mobileNumber").change(function () {
+           var contactForm = $(this).closest("form");
+           var contactForm2 = document.querySelector("#mobileNumber").value;
+          console.log("hello")//to test
+          $.ajax({
+            url: '/GoRent/Owner/Register',
+            method: "POST",
+            headers: {"X-CSRFToken":"{{ csrf_token }}"},
+            data:JSON.stringify({'ajaxAction':'validateContact','checkContact':contactForm2}),
+            dataType:'json',
+            success: function(contactData){
+              contactError = contactData.error_code;
+              // if(contactData.error_code = 3){
+              //   alert("A user with this contact number already exists.");
+              // }
+              // else if(contactData.error_code = 4){
+              //   alert("Invalid Contact Number")
+              // }
+            }
+          });
+        });
+        // PASSWORD VALIDATOR
+        $("#password").change(function () {
+           var passForm = $(this).closest("form");
+           var passForm2 = document.querySelector("#password").value;
+          console.log("random")//to test
+          $.ajax({
+            url: '/GoRent/Owner/Register',
+            method: "POST",
+            headers: {"X-CSRFToken":"{{ csrf_token }}"},
+            data:JSON.stringify({'ajaxAction':'validatePassword','checkPassword':passForm2}),
+            dataType:'json',
+            success: function(passData){
+              passError = passData.error_code;
+              console.log(passError)  
+              // if(passData.error_code = 5){
+              //   alert("Password must contain at least 9 characters");
+              // }
+            }
+          });
+        });
+        // $("#email").(function () {
+        //     $("email").focus()
+        //     if(error_code = 1){
+        //         alert("A user with this email already exists.");
+        //       }
+        //  });
+  
+// var currentTab = 0; // Current tab is set to be the first tab (0)
+// showTab(currentTab); // Display the current tab
 
-      </script>
+// function showTab(n) {
+//   // This function will display the specified tab of the form ...
+//   var x = document.getElementsByClassName("tab");
+//   x[n].style.display = "block";
+//   // ... and fix the Previous/Next buttons:
+//   if (n == 0) {
+//     document.getElementById("prevBtn").style.display = "none";
+//   } else {
+//     document.getElementById("prevBtn").style.display = "inline";
+//   }
+//   if (n == (x.length - 1)) {
+//     document.getElementById("nextBtn").innerHTML = "Submit";
+//   } else {
+//     document.getElementById("nextBtn").innerHTML = "Next";
+//   }
+//   // ... and run a function that displays the correct step indicator:
+//   fixStepIndicator(n)
+// }
 
-<script>
-var currentTab = 0; // Current tab is set to be the first tab (0)
-showTab(currentTab); // Display the current tab
+function validate(n) {
 
-function showTab(n) {
-  // This function will display the specified tab of the form ...
-  var x = document.getElementsByClassName("tab");
-  x[n].style.display = "block";
-  // ... and fix the Previous/Next buttons:
-  if (n == 0) {
-    document.getElementById("prevBtn").style.display = "none";
-  } else {
-    document.getElementById("prevBtn").style.display = "inline";
+  if (emailError == 1) {
+    document.querySelector("#email").focus()
+    alert("Invalid Email")
   }
-  if (n == (x.length - 1)) {
-    document.getElementById("nextBtn").innerHTML = "Submit";
-  } else {
-    document.getElementById("nextBtn").innerHTML = "Next";
+  else if(emailError == 2){
+    document.querySelector("#email").focus()
+    alert("A user with this email already exists.");
   }
-  // ... and run a function that displays the correct step indicator:
-  fixStepIndicator(n)
-}
-
-function nextPrev(n) {
-  // This function will figure out which tab to display
-  var x = document.getElementsByClassName("tab");
-  // Exit the function if any field in the current tab is invalid:
-  if (n == 1 && !validateForm()) return false;
-  // Hide the current tab:
-  x[currentTab].style.display = "none";
-  // Increase or decrease the current tab by 1:
-  currentTab = currentTab + n;
-  // if you have reached the end of the form... :
-  if (currentTab >= x.length) {
-    //...the form gets submitted:
+  else if (passError == 5) {
+    document.querySelector("#password").focus()
+    alert("Password must contain at least 9 characters and no whitespace included")
+  }
+  else if (contactError == 3) {
+    document.querySelector("#mobileNumber").focus()
+    alert("A user with this contact number already exists.")
+  }
+  else if (contactError == 4) {
+    document.querySelector("#mobileNumber").focus()
+    alert("Invalid Contact Number")
+  }
+  else{
     document.getElementById("form1").submit();
-    return false;
+    // // This function will figure out which tab to display
+    // var x = document.getElementsByClassName("tab");
+    // // Exit the function if any field in the current tab is invalid:
+    // if (n == 1 && !validateForm()) return false;
+    // // Hide the current tab:
+    // x[currentTab].style.display = "none";
+    // // Increase or decrease the current tab by 1:
+    // currentTab = currentTab + n;
+    // // if you have reached the end of the form... :
+    // if (currentTab >= x.length) {
+    //   //...the form gets submitted:
+    //   document.getElementById("form1").submit();
+    //   return false;
+    // }
+    // // Otherwise, display the correct tab:
+    // showTab(currentTab);
   }
-  // Otherwise, display the correct tab:
-  showTab(currentTab);
+
+
+  // if (error_code == 0){
+  //   // This function will figure out which tab to display
+  //   var x = document.getElementsByClassName("tab");
+  //   // Exit the function if any field in the current tab is invalid:
+  //   if (n == 1 && !validateForm()) return false;
+  //   // Hide the current tab:
+  //   x[currentTab].style.display = "none";
+  //   // Increase or decrease the current tab by 1:
+  //   currentTab = currentTab + n;
+  //   // if you have reached the end of the form... :
+  //   if (currentTab >= x.length) {
+  //     //...the form gets submitted:
+  //     document.getElementById("form1").submit();
+  //     return false;
+  //   }
+  //   // Otherwise, display the correct tab:
+  //   showTab(currentTab);
+  // }
+
+  
+  // else if(error_code == 2){
+  //   document.querySelector("#email").focus()
+  //   alert("A user with this email already exists.");
+  // }
+  // else if(error_code == 1){
+  //   document.querySelector("#email").focus()
+  //   alert("Invalid Email")
+  // }
+  // else if(contactError == 3){
+  //   document.querySelector("#mobileNumber").focus()
+  //   alert("A user with this contact number already exists.")
+  // }
+  // else if(contactError == 4){
+  //   document.querySelector("#mobileNumber").focus()
+  //   alert("Invalid Contact Number")
+  // }
+  // else if(passError == 5){
+  //   document.querySelector("#password").focus()
+  //   alert("Password must contain at least 9 characters")
+  // }
 }
 
 function validateForm() {
@@ -269,22 +379,9 @@ function validateForm() {
   return valid; // return the valid status
 }
 
-function isContactValid(str){
-  RegEx = /^(09|\+639)\d{9}$/
-  valid = RegEx.test(str);
-  valid == false? alert("Incorrect Mobile Number Format!\nMobile Number should start with +639 or 09 followed by 9 digits"):null
-  return valid
-}
 
-function fixStepIndicator(n) {
-  // This function removes the "active" class of all steps...
-  var i, x = document.getElementsByClassName("step");
-  for (i = 0; i < x.length; i++) {
-    x[i].className = x[i].className.replace(" active", "");
-  }
-  //... and adds the "active" class to the current step:
-  x[n].className += " active";
-}
+
+
     </script>
 
     {% endblock %}
