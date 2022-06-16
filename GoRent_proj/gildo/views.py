@@ -60,11 +60,11 @@ class GoRentMainView(View):
 		request = json.loads(request.body)
 
 		if request["ajaxAction"] == "addressValidation":
-			isValid = GoRentMapSearch..isAdressValid(request["address"])
+			isValid = GoRentMapSearch.isAdressValid(request["address"])
 			return JsonResponse({'isValid':isValid})
 
 		elif request["ajaxAction"] == "addressValidation":
-			isValid = GoRentMapSearch..isCoordinatesValid(request["coord"])
+			isValid = GoRentMapSearch.isCoordinatesValid(request["coord"])
 			return JsonResponse({'isValid':isValid})
 
 
