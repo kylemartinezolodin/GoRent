@@ -12,8 +12,8 @@ class GoRentMapSearch():
     
     @staticmethod
     def isCoordinatesValid(coords):
-        return bool(re.search("^\d+(\.\d*)?\,\d+(\.\d*)?$", coords))
-		
+        return bool(re.search("^(\d+|[0])(\.\d+)?\,(\d+|[0])(\.\d+)?$", coords)) # ONLY ALLOW X,Y OR 0.X,Y.Y FORMATS
+
 from django.db.models.aggregates import Count
 from database.models import *
 from .serializers import *
@@ -97,4 +97,3 @@ class GoRentNearbySpace():
 
 		return self.nearby_list # returns list type
 
-	# self.nearby_list = [[Space.objects, distance]]

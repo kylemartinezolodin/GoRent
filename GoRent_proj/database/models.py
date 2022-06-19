@@ -16,7 +16,7 @@ class RentOwner(models.Model):
 class Space(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length = 100)
-    coordinates = models.CharField(max_length = 10)
+    coordinates = models.CharField(max_length = 100)
     owner = models.ForeignKey(db_column = 'owner', to = 'database.RentOwner', on_delete = models.CASCADE, null = True) # IT CAN BE NULL ESPECIALLY WHEN A SHAREE REGISTERS THE SPACE WITHOUT THE LANDLORD REGISTERED IN GoRent
     address = models.CharField(max_length = 100)
     price = models.DecimalField(null = True, max_digits = 6, decimal_places = 2)

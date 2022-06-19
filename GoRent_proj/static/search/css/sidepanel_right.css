@@ -1,8 +1,8 @@
 .map-sidepanel-right {
-    height: 100vh;
+    /* height: 100vh; */
     /* height: 87.5vh; */ /* UNCOMMENT IF USING OLODINS TOP-NAVBAR */
     width: 20vw;
-    position: absolute;
+    /* position: absolute; */
     /* top: 10vh; */ /* UNCOMMENT IF USING OLODINS TOP-NAVBAR */
     right: 0;
     z-index: 1000;
