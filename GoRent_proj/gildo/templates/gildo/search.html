@@ -120,26 +120,149 @@ https://www.tooplate.com/view/2095-level
                 </div>
             </div>
 
-            <!-- MAP -->
-            <div id="map" class="map_viewport">
 
-                <!-- MAP SEARCH BAR -->
-                <!-- <div class="container-map_searchbar">
-                    <input type="text" name="" id="" class="map_seachbar">
-                    
-                    <div class="map_search_results">
-                        Spain, Skimberlo 6000
+
+            <!-- MAIN CONTENT CONTAINER -->
+            <div style="display: flex;">
+                <!-- MAP -->
+                <div id="map" class="map_viewport" style="position: relative; height: 95vh; outline: none;">
+
+                    <!-- MAP SEARCH BAR -->
+                    <!-- <div class="container-map_searchbar">
+                        <input type="text" name="" id="" class="map_seachbar">
+                        
+                        <div class="map_search_results">
+                            Spain, Skimberlo 6000
+                        </div>
                     </div>
+                    -->
+
+                    <script type="text/javascript">
+                        recentlyClickedSpaceId = -1;
+                        // ADD MARKER SAMPLE CODE
+                        markers = [
+                            L.marker([10.3157, 123.8854],{
+                                title: 'someSpaceId',
+                            }).on('click', doSomething),
+                            L.marker([10.30, 123.700]),
+                        ]
+                        
+                        function doSomething(e){
+                            console.log("tambis")
+                            recentlyClickedSpaceId = e.target.title
+                            console.log(e.target.options["title"])
+                        }
+
+                        user_flag = {% if user is None %} false {% else %} true {% endif %};
+                        user_locate = {
+                            isLocating: false, // BECOMES TRUE IF USER IS MANUALLY LOCATING 
+                            location: null,
+                            address: null, // L.Control.Geocoder FROM: https://github.com/perliedman/leaflet-control-geocoder/tree/1.13.0#lcontrolgeocoder IS ASYCNHRONOUS THUS WHY WE NEED TO UPDATE AFTER user_locate.address IS UPDATED
+                            addressListener: function (val) { // A MAKESHIFT LISTENER WHEN address PROPERTY IS CHANGED
+                                if (user_flag)
+                                    fillSpaceInfo() // USED WHEN LOGGED IN
+                                else
+                                    activateNearbyList() // USED WHEN RENTEE
+                            },
+                            set address(val) { // OVERIDING SETTER (I.E. user_locate.address = [some_value] EVENT)
+                                this._address = val // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                                this.addressListener(val);
+                            },
+                            get address() { // OVERIDING GETTER (I.E. console.log(user_locate.address) EVENT)
+                                return this._address // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                            },
+                        }
+                        
+                        // A MAKESHIFT SLEEP() FROM: https://www.sitepoint.com/delay-sleep-pause-wait/
+                        function sleep(ms) {
+                            return new Promise(resolve => setTimeout(resolve, ms));
+                        }
+                        
+                        // async function toggleMapLocate () { // IT IS ASYNCH BECUASE IT USES THE MAKESHIFT SLEEP() FROM: https://www.sitepoint.com/delay-sleep-pause-wait/
+                        //     await sleep(100)
+                        //     // setTimeout(function() {
+                        //     //     user_locate.isLocating = !user_locate.isLocating // locate IS A BOOLEAN
+                        //     // }, 100);
+                        //     user_locate.isLocating = !user_locate.isLocating
+                        //     console.log("isLocating:" +user_locate.isLocating)
+                        // }
+
+                        function toggleMapLocate () { // IT IS ASYNCH BECUASE IT USES THE MAKESHIFT SLEEP() FROM: https://www.sitepoint.com/delay-sleep-pause-wait/
+                            // await sleep(100)
+                            // setTimeout(function() {
+                            //     user_locate.isLocating = !user_locate.isLocating // locate IS A BOOLEAN
+                            // }, 100);
+                            user_locate.isLocating = !user_locate.isLocating
+                            console.log("isLocating:" +user_locate.isLocating)
+                        }
+
+                        function getLocation() {
+                            if (navigator.geolocation) { // CHECKS IF GEOLOCATION IS SUPPORTED IN THE BROWSER
+                                navigator.geolocation.getCurrentPosition(showLocation);
+                            } else {
+                                document.querySelector("#location").innerHTML = "Geolocation is not supported by this browser. Manully pick location instead";
+                                document.querySelector("#button-auto_locate").style.display = "none"
+                            }
+                        }
+
+                        function activateNearbyList () { // HAPPENS IF user_locate.location IS NO LONGER NULL
+                            document.querySelector("#location").innerHTML = "ANG CURRENT NGA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA DISTANCE FORMULA"
+                            console.log("qweqwe")
+                            // console.log({{csrf_token}})
+                                $.ajax({
+                                    url: "{% url 'gildo:main_view' %}",
+                                    type: "post",
+                                    headers: {
+                                    'X-CSRFToken':'{{csrf_token}}',
+                                    
+                                    },
+                                    data: JSON.stringify({"latitude": user_locate.location.lat, "longitude": user_locate.location.lng}),
+                                    
+                                    success: function (response) {
+                                    console.log(response)// You will get response from your PHP page (what you echo or print)
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                    console.log(textStatus, errorThrown);
+                                    }
+                                });
+
+                            document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
+                            document.querySelector("#button-auto_locate").style.display = "none"
+                            document.querySelector("#container-nearby_list").style.display = "block"
+                        }
+                        
+                        function fillSpaceInfo () { // HAPPENS IF user_locate.location IS NO LONGER NULL
+                            document.querySelector("#location").innerHTML = "ANG ADDRESS KAY: " +user_locate.address +" NYA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA MAKA ADD OG SPACE"
+
+                            document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
+                            document.querySelector("#button-auto_locate").style.display = "none"
+                            document.querySelector("#button-submit_space").style.display = "block"
+                            document.querySelector("#button-add_space_image").style.display = "block"
+                        }
+
+                        function toggleLoadingScreen () { // WALA PA GI GAMIT KAY MURAG MO CAUSE OG PROBLEM, ANYWAY AESTHETICS RAMNSAD NI NGA FUNCTIONALITIES
+                            loading_screen = document.querySelector("#container-nearby_list_loading_screen")
+                            if (loading_screen.style.display == "none") {
+                                loading_screen.style.display = "block"
+                                document.querySelector("#container-nearby_list").style.display = "none"
+                            }
+                            else {
+                                loading_screen.style.display = "none"
+                                document.querySelector("#container-nearby_list").style.display = "block"
+                            }
+                        }
+
+                    </script>
                 </div>
-                -->
+
                 
                 {% if user is None %}
 
                 <!-- NEARBY LIST BLOCK -->
                 <div class="map-sidepanel-right">
                     
-                    <button id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
-                    <button id="button-auto_locate"  onclick="getLocation()">Enable Location</button>
+                    <button id="button-manual_locate" onclick="toggleMapLocate()" type="button" class="btn btn-secondary"   >Pick Location on Map</button>
+                    <button id="button-auto_locate"  onclick="getLocation()" class="btn btn-outline-primary">Enable Location</button>
 
                     <form action="index.html" method="get" class="">
                         {% csrf_token %}
@@ -429,6 +552,7 @@ https://www.tooplate.com/view/2095-level
 
                 </script>
             </div>
+            <!-- END MAIN CONTENT CONTAINER -->
 
             <!-- GILDO'S BODY CURRENTLY HIDDEN -->
             <div class="tm-section tm-bg-img" id="tm-section-1" style="display: none">
