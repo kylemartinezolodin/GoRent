@@ -15,6 +15,7 @@ class RentOwner(models.Model):
 
 class Space(models.Model):
     id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length = 100)
     coordinates = models.CharField(max_length = 10)
     owner = models.ForeignKey(db_column = 'owner', to = 'database.RentOwner', on_delete = models.CASCADE, null = True) # IT CAN BE NULL ESPECIALLY WHEN A SHAREE REGISTERS THE SPACE WITHOUT THE LANDLORD REGISTERED IN GoRent
     address = models.CharField(max_length = 100)
@@ -24,7 +25,7 @@ class Space(models.Model):
         db_table = "Spaces"
 
     def __str__(self):
-        return "[" +self.id +"] " +self.coordinates
+        return "[" +str(self.id) +"] " +self.coordinates
 
 
 class SpaceImage(models.Model):
