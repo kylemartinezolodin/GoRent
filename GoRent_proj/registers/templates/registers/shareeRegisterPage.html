@@ -289,14 +289,15 @@ input.invalid {
         document.querySelector("#mobileNumber").focus()
         alert("Invalid Contact Number")
       }
-      else if (contactError == 0){
-        alert("Please provide Contact Number.")
+      else if (emailError == 0){
+        alert("Please provide your valid email")
       }
+      
       else if (passError == 0){
         alert("Please provide your password.")
       }
-      else if (emailError == 0){
-        alert("Please provide your valid email")
+      else if (contactError == 0){
+        alert("Please provide Contact Number.")
       }
       else{
         document.getElementById("form1").submit();
