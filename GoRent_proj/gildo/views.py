@@ -6,7 +6,6 @@ from django.views.generic import View
 #from .forms import *
 from database.models import *
 from .controller import *
-
 import json
 	
 # Create your views here.
@@ -55,19 +54,51 @@ class GoRentMainView(View):
 				return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type, "sharee":sharee})
 		
 		return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type})
-
-	def post(self, request):
-		request = json.loads(request.body)
-
-		if request["ajaxAction"] == "addressValidation":
-			isValid = GoRentMapSearch.isAdressValid(request["address"])
-			return JsonResponse({'isValid':isValid})
-
-		elif request["ajaxAction"] == "addressValidation":
-			isValid = GoRentMapSearch.isCoordinatesValid(request["coord"])
-			return JsonResponse({'isValid':isValid})
-
-
-		return JsonResponse({'foo':'bar'})
-
 		
+	def post(self, request):
+		if request.method == 'POST':
+			print("hello")
+			request = json.loads(request.body)
+			print(request)
+
+			if request["ajaxAction"] == "addressValidation":
+				isValid = GoRentMapSearch.isAdressValid(request["address"])
+				return JsonResponse({'isValid':isValid})
+
+			elif request["ajaxAction"] == "addressValidation":
+				isValid = GoRentMapSearch.isCoordinatesValid(request["coord"])
+				return JsonResponse({'isValid':isValid})
+
+			elif request["ajaxAction"] == "getNearbySpaces":
+				user_coord = [request["latitude"],["longitude"]]
+				classObject = GoRentNearbySpace(request["latitude"], request["longitude"])
+				nearby_spaces = classObject.rankSpaces()
+
+				print(nearby_spaces)
+				return JsonResponse({'nearby_spaces':nearby_spaces})
+			elif request["ajaxAction"] == "renteeApplicationSubmition":
+				print("duka")
+				print(request["owner"])
+				print(request["email"])
+				return JsonResponse({})
+				# save RentOwnerRenteeRequest data 
+
+			elif 'btnAccept' in request.POST:
+				print("accept button clicked")
+				eid = request.POST.get("email-id")
+				em = Sharee.objects.filter(email_ptr_id=eid).delete()
+				perss = ShareeRenteeRequest.objects.filter(id = eid).delete()
+				print('record deleted')
+
+			elif 'btnDelete' in request.POST:
+				print("delete button clicked")
+				eid = request.POST.get("email-id")
+				em = Sharee.objects.filter(email_ptr_id=eid).delete()
+				pers = ShareeRenteeRequest.objects.filter(id = eid).delete()
+				print('record deleted')
+
+		return render(request, 'gildo/search.html', context={"user":user_object, "type":user_type})
+		
+		# nearby = json.loads(request.body)
+		# print(nearby["longitude"])
+		# return JsonResponse({'foo':'bar'})
