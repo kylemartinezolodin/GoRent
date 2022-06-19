@@ -146,11 +146,11 @@ https://www.tooplate.com/view/2095-level
                         <input name="price" type="text" class="" id="inputLocation" placeholder="Budget (PHP)">
                     </form>
 
-                    Nearby spaces: (ANG ORDER SA MGA SPACES KAY USING DISTANCE FORMULA)
+                    Nearby spaces:
                     <br>
                     <div id="location"></div>
                     <div id="container-nearby_list_loading_screen" class="container-nearby_list_loading_screen" style="display: none;">
-                        LOADING (LOADING SCREEN NI KUNG KAYA DESIGNA NI, PERO LOW PRIORITY JUD ANG DESIGNx2)
+                        LOADING
                     </div>
                     <div id="container-nearby_list" class="container-nearby_list" style="display: none;">
                         <div class="container-nearby_list_items">
@@ -163,38 +163,59 @@ https://www.tooplate.com/view/2095-level
                             <div>
                             [Some Image][Some Image][Some Image]
                             </div>
-                            (SPACE KUNUHAY NI)
-                            <button>Send Application</button>
-                        </div>
-                        <div class="container-nearby_list_items">
-                            <div>
-                                GV TOWER
-                            </div>
-                            <div>
-                                Colon 12356 Kalsada St., Cebu City
-                            </div>
-                            <div>
-                                [Some Image][Some Image][Some Image]
-                            </div>
-                            (SPACES KUNUHAY NI)
-                            <button>Send Application</button>
-                        </div>
-                        <div class="container-nearby_list_items">
-                            <div>
-                                Queensland
-                            </div>
-                            <div>
-                                Colon 12356 Kalsada St., Cebu City
-                            </div>
-                            <div>
-                                NO IMAGE
-                            </div>
-                            (SPACES KUNUHAY NI)
                             <button>Send Application</button>
                         </div>
                     </div>
 
                 </div>
+
+                <!-- Send Application Modal -->
+                <!-- EGUIA ADA ANG MODAL APPLICATION -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" id="send_application-modal-owner">
+                            Email:<input type="text" id="send_application-modal-email">
+                        </div>
+                        <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="submitApplicationModal()">Submit</button>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    function submitApplicationModal() { // EGUIA ADA ANG AJAX APPLICATION
+                        $.ajax({
+                                url: "{% url 'gildo:main_view' %}",
+                                type: "post",
+                                headers: {
+                                'X-CSRFToken':'{{csrf_token}}',
+                                
+                                },
+                                data: JSON.stringify({
+                                "ajaxAction": "renteeApplicationSubmition",
+                                "owner": document.querySelector("#send_application-modal-owner").value,
+                                "email": document.querySelector("#send_application-modal-email").value
+                                }),
+                                success: function (response) {
+                                    console.log("Space Application Sent!")
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                console.log(textStatus, errorThrown);
+                                }
+                            });
+
+                    }
+                </script>
 
                 {% else %}
                 
@@ -209,6 +230,25 @@ https://www.tooplate.com/view/2095-level
                     <button id="button-add_space_image" style="display:none">Add Image</button>
                     <button id="button-submit_space" style="display:none">Submit</button>
                 </div>
+                {% for item in rentowner %}
+                <div class="map-sidepanel-right">
+                    Request List:
+                    <br>
+                    <div id="container-request_list" class="container-request_list">
+                        <div class="bg-light">
+                            <div class="bg-light">
+                                <p>Firstname: {{item.firstname}} </p>
+                                <p>Lastname: {{item.lastname}} </p>
+                                <p>Email: {{item.email}} </p>
+                                <p>Contact: {{item.contactnumber}} </p>
+                            </div>
+                            <button name="email-id" value={{email.id}} type="submit" id="btnAccept" class="btn btn-primary" data-target="{{email.id}}">Accept</button>
+                            <button name="email-id" value={{email.id}} type="submit" id="btnDelete" class="btn btn-primary" data-target="{{email.id}}">Delete</button>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                {% endfor%}
                 {% endif %}
 
                 <!-- NEARBY LIST BLOCK -->
@@ -218,15 +258,15 @@ https://www.tooplate.com/view/2095-level
                     Request List:
                     <br>
                     <div id="container-request_list" class="container-request_list">
-                        <div class="container-request_list_items">
-                            <div>
+                        <div class="bg-light">
+                            <div class="bg-light">
                                 <p>Firstname: {{item.firstname}} </p>
                                 <p>Lastname: {{item.lastname}} </p>
                                 <p>Email: {{item.email}} </p>
-                                <p>Contact: {{item.contact}} </p>
+                                <p>Contact: {{item.contactnumber}} </p>
                             </div>
-                            <button>Accept</button>
-                            <button>Reject</button>
+                            <button name="email-id" value={{email.id}} type="submit" id="btnAccept" class="btn btn-primary" data-target="{{email.id}}">Accept</button>
+                            <button name="email-id" value={{email.id}} type="submit" id="btnDelete" class="btn btn-primary" data-target="{{email.id}}">Delete</button>
                             <br>
                         </div>
                     </div>
@@ -298,13 +338,59 @@ https://www.tooplate.com/view/2095-level
                                 'X-CSRFToken':'{{csrf_token}}',
                                 
                                 },
-                                data: JSON.stringify({"latitude": user_locate.location.lat, "longitude": user_locate.location.lng}),
+                                data: JSON.stringify({"ajaxAction": "getNearbySpaces", "latitude": user_locate.location.lat, "longitude": user_locate.location.lng}),
                                 
                                 success: function (response) {
-                                console.log(response)// You will get response from your PHP page (what you echo or print)
+                                    console.log('asd123')
+                                    console.log(response)// You will get response from your PHP page (what you echo or print)
+                                    //console.log(response[0])
+                                    console.log(response["nearby_spaces"][0]["distance"])
+                                    nearby_spaces = response["nearby_spaces"]
+                                    
+                                    document.getElementById("container-nearby_list").innerHTML = ''; // PLZ CHANGE THIS, It Removes all Space entries appended in previous querries
+
+                                    for (let i = 0; i < nearby_spaces.length; i++) {
+                                    console.log("mehh" +i);
+                                    console.log(nearby_spaces[i]["space"]);
+                                    var temp = document.createElement("div");
+                                    temp.className = "container-nearby_list_items"
+                                    
+                                    temp2 = document.createElement("div")
+                                    temp2.innerHTML = nearby_spaces[i]["space"]["owner"]["email"]
+                                    temp.appendChild(temp2)
+
+                                    temp3 = document.createElement("div")
+                                    temp3.innerHTML = nearby_spaces[i]["space"]["owner"]["contactnumber"]
+                                    temp.appendChild(temp3)
+
+                                    temp4 = document.createElement("div")
+                                    temp4.innerHTML = nearby_spaces[i]["space"]["price"]
+                                    temp.appendChild(temp4)
+
+                                    temp5 = document.createElement("div")
+                                    temp5.innerHTML = nearby_spaces[i]["space"]["space"]
+                                    temp.appendChild(temp5)
+
+                                    tempbutton = document.createElement("button")
+                                    tempbutton.setAttribute('data-toggle', "modal")
+                                    tempbutton.setAttribute('data-target', "#exampleModal")
+                                    tempbutton.setAttribute('onclick', "setModalReciepient('" +nearby_spaces[i]["space"]["owner"]["email"]  +"')") // Clicking the button call this function                                    
+                                    // tempbutton.setAttribute('onclick', "dali(" +"'pop'"  +")") // Clicking the button call this function
+                                    tempbutton.innerHTML = "Send Application"
+                                    temp.appendChild(tempbutton)
+                                    
+                                    // tempButton = document.createElement("button")
+                                    // input[type="button"].tempButton{}
+                                    // temp.appendChild(tempButton)
+                                    
+                                    document.getElementById("container-nearby_list").appendChild(temp);
+                                    }
+                                    
+                                  
                                 },
                                 error: function(jqXHR, textStatus, errorThrown) {
                                 console.log(textStatus, errorThrown);
+                                console.log("chuchu")
                                 }
                             });
 
@@ -312,8 +398,15 @@ https://www.tooplate.com/view/2095-level
                         document.querySelector("#button-auto_locate").style.display = "none"
                         document.querySelector("#container-nearby_list").style.display = "block"
                     }
+                    function dali(ez) {
+                        console.log("kapoy" +ez);
+                    }
+                    function setModalReciepient(email) {
+                        document.querySelector("#send_application-modal-owner").value = email
+                    }
+
                     
-                    function fillSpaceInfo () { // HAPPENS IF user_locate.location IS NO LONGER NULL
+                    function fillSpaceInfo () { // HAPPENS IF user_locate.location IS NO  ER NULL
                         document.querySelector("#location").innerHTML = "ANG ADDRESS KAY: " +user_locate.address +" NYA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA MAKA ADD OG SPACE"
 
                         document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
