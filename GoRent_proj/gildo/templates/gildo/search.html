@@ -206,7 +206,7 @@ https://www.tooplate.com/view/2095-level
                         }
 
                         function activateNearbyList () { // HAPPENS IF user_locate.location IS NO LONGER NULL
-                            document.querySelector("#location").innerHTML = "ANG CURRENT NGA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA DISTANCE FORMULA"
+                            document.querySelector("#location").innerHTML = "Current Coordinates: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] "
                             console.log("qweqwe")
                             // console.log({{csrf_token}})
                                 $.ajax({
@@ -376,10 +376,10 @@ https://www.tooplate.com/view/2095-level
 
                 <!-- NEARBY LIST BLOCK -->
                 
-                {% for item in sharee %}
                 <div class="map-sidepanel-right">
                     Request List:
                     <br>
+                    {% for item in sharee %}
                     <div id="container-request_list" class="container-request_list">
                         <div class="bg-light">
                             <div class="bg-light">
@@ -393,8 +393,8 @@ https://www.tooplate.com/view/2095-level
                             <br>
                         </div>
                     </div>
+                    {% endfor%}
                 </div>
-                {% endfor%}
 
                 {% endif %}
 
@@ -451,7 +451,7 @@ https://www.tooplate.com/view/2095-level
                     }
 
                     function activateNearbyList () { // HAPPENS IF user_locate.location IS NO LONGER NULL
-                        document.querySelector("#location").innerHTML = "ANG CURRENT NGA COORDINATES KAY: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] GAMITA NI PARA DISTANCE FORMULA"
+                        document.querySelector("#location").innerHTML = "Current Coordinates: " +"[lat:" +user_locate.location.lat +", lng: " +user_locate.location.lng +"] "
                         console.log("qweqwe")
                         // console.log({{csrf_token}})
                             $.ajax({
@@ -479,19 +479,19 @@ https://www.tooplate.com/view/2095-level
                                     temp.className = "container-nearby_list_items"
                                     
                                     temp2 = document.createElement("div")
-                                    temp2.innerHTML = nearby_spaces[i]["space"]["owner"]["email"]
+                                    temp2.innerHTML = "Email:" +nearby_spaces[i]["space"]["owner"]["email"]
                                     temp.appendChild(temp2)
 
                                     temp3 = document.createElement("div")
-                                    temp3.innerHTML = nearby_spaces[i]["space"]["owner"]["contactnumber"]
+                                    temp3.innerHTML = "Contact Number:" +nearby_spaces[i]["space"]["owner"]["contactnumber"]
                                     temp.appendChild(temp3)
 
                                     temp4 = document.createElement("div")
-                                    temp4.innerHTML = nearby_spaces[i]["space"]["price"]
+                                    temp4.innerHTML = "Price:" +nearby_spaces[i]["space"]["price"]
                                     temp.appendChild(temp4)
 
                                     temp5 = document.createElement("div")
-                                    temp5.innerHTML = nearby_spaces[i]["space"]["space"]
+                                    temp5.innerHTML = "Space:" +nearby_spaces[i]["space"]["space"]
                                     temp.appendChild(temp5)
 
                                     tempbutton = document.createElement("button")
