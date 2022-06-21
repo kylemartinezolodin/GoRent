@@ -6,17 +6,15 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+    <link rel="stylesheet" href="{% static 'https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <meta charset="utf-8">
 
     <title>GoRent | Search</title>
     
-<!--
 
-Tooplate 2095 Level
-
-https://www.tooplate.com/view/2095-level
-
--->
     <!-- load stylesheets -->
     <link rel="stylesheet" href="{% static 'gildo/https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700' %}">  <!-- Google web font "Open Sans" -->
     <link rel="stylesheet" href="{% static 'gildo/font-awesome-4.7.0/css/font-awesome.min.css' %}">                <!-- Font Awesome -->
@@ -34,16 +32,18 @@ https://www.tooplate.com/view/2095-level
     <!-- LEAFLET CSS (AND JS IT IS REQUIRED THAT JS SHOULD BE PUT AFTER THE CSS)-->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" 
         integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A==" crossorigin=""/> <!-- BASE LEAFLET STYLES -->
-    <link rel="stylesheet" href="{% static 'js/leaflet/geosearch.js' %}">  <!-- LEAFLET COORDINATES STYLES -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/> <!-- LEAFLET GEOSEARCH STYLES -->
+    <link rel="stylesheet" href="js/leaflet/geosearch.js">  <!-- LEAFLET COORDINATES STYLES -->
+    <link rel="stylesheet" href="static 'https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.css"/> <!-- LEAFLET GEOSEARCH STYLES -->
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
     integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
     crossorigin="">
-    </script><!-- BASE LEAFLET JS -->
+    </script>
+    
+    <!-- BASE LEAFLET JS -->
     <script src="https://unpkg.com/leaflet-geosearch@3.0.0/dist/geosearch.umd.js"></script> <!-- LEAFLET ADD-ON GEOSEARCH JS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" /> <!-- LEAFLET ADD-ON leaflet-control-geocoder STYLES -->
     <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script> <!-- LEAFLET ADD-ON leaflet-control-geocoder JS -->
-    <script src="{% static 'js/leaflet/geosearch.js' %}"></script> <!-- LEAFLET ADD-ON leaflet-geoip JS -->
+    <script src="js/leaflet/geosearch.js"></script> <!-- LEAFLET ADD-ON leaflet-geoip JS -->
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -53,72 +53,70 @@ https://www.tooplate.com/view/2095-level
 </head>
 
     <body>
-        <div class="tm-main-content" id="top">
+        <!-- <div class="tm-main-content" id="top"> -->
             
-            <!-- CUSTOM TOP NAVBAR  NI OLODIN-->
-            <!-- <div class="gorent-top-navbar">
-                <div class="top-navbar-left_group">
-                    <div class="container-logo">
+            <!-- CUSTOM TOP NAVBAR  NI OLODIN--> 
+            <!-- <div class="gorent-top-navbar"> -->
+                <!-- <div class="top-navbar-left_group"> -->
+                    <!-- <div class="container-logo">
                         <img src="{% static 'img/gorent_icon.png' %}" alt="Site logo">
                         <img src="{% static 'img/gorent_plain.png' %}" alt="Site logo">
-                    </div>
-                </div>
+                    </div> -->
+                <!-- </div> -->
 
-                <div class="container-topnav_buttons">
+                <!-- <div class="container-topnav_buttons">
                     <a class="topnav_button" href="#">About Us</a>
                     <a class="topnav_button" href="#">Register your space</a>
-                </div>
+                </div> -->
                 
-            </div> -->
+            <!-- </div> -->
 
             <!-- <div class="tm-top-bar-bg"></div>
             <div class="tm-top-bar" id="tm-top-bar"> -->
-                <!-- Top Navbar -->
-                <div class="container">
-                    <div class="row">
-                        
-                        <nav class="navbar navbar-expand-lg narbar-light">
-                            <a class="navbar-brand mr-auto" href="#">
-                                <img src="img/gorent_icon.png" alt="Site logo">
-                                <img src="img/gorent_plain.png" alt="Site logo">
-                            </a>
-                            <button type="button" id="nav-toggle" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#mainNav" aria-expanded="false" aria-label="Toggle navigation">
-                                <span class="navbar-toggler-icon"></span>
-                            </button>
-                            <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
-                                <ul class="navbar-nav ml-auto">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#top">About Us <span class="sr-only">(current)</span></a>
-                                    </li>
+                
+        <!-- Top Navbar -->
+        <div class="container">
+            <div class="row">   
+                <nav class="navbar navbar-expand-lg narbar-light">
+                    <a class="navbar-brand mr-auto" href="#">
+                        <img src="{% static 'img/gorent_icon.png' %}" alt="Site logo">
+                        <img src="{% static 'img/gorent_plain.png' %}" alt="Site logo">
+                    </a>
+                    <button type="button" id="nav-toggle" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div id="mainNav" class="collapse navbar-collapse tm-bg-white">
+                        <ul class="navbar-nav ml-auto">
+                            <li class="nav-item">
+                                <a class="nav-link" href="#top">About Us <span class="sr-only">(current)</span></a>
+                            </li>
 
-                                    {% if user is None %} <!-- IF "user" EXIST IN CONTEXT -->
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'registers:about_view' %}">Register your space</a>
-                                    </li>
-                                    {% else %}
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="settings.html">{{user.fistname}}{{user.lastname}}</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{% url 'registers:logout_view' %}">logout</a>
-                                    </li>
-                                    {% endif %}
-                                    <!-- <li class="nav-item">
-                                        <a class="nav-link active" href="#tm-section-5">Rent</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="Billing.html">Billings</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="#tm-section-6" >My Account</a>
-                                    </li> -->
-                                </ul>
-                            </div>                            
-                        </nav>            
-                    </div> 
-
-                </div>
-            </div>
+                            {% if user is None %} <!-- IF "user" EXIST IN CONTEXT -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'registers:about_view' %}">Register your space</a>
+                            </li>
+                            {% else %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="settings.html">{{user.fistname}}{{user.lastname}}</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'registers:logout_view' %}">logout</a>
+                            </li>
+                            {% endif %}
+                            <!-- <li class="nav-item">
+                                <a class="nav-link active" href="#tm-section-5">Rent</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="Billing.html">Billings</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#tm-section-6" >My Account</a>
+                            </li> -->
+                        </ul>
+                    </div>                            
+                </nav>            
+            </div> 
+        </div>
 
 
 
@@ -256,7 +254,144 @@ https://www.tooplate.com/view/2095-level
                 </div>
 
                 
-                {% if user is None %}
+                <!-- {% if user is None %} -->
+
+                <!--REGISTER-->
+                {% if type == "RentOwner" %}
+                
+                <div class="map-sidepanel-left">
+                    <h4><center>Register Space</center></h4>
+                    
+                    <button class="btn btn-sub" id="button-manual_locate" onclick="toggleMapLocate()">Pick Location on Map</button>
+                    <button class="btn btn-sub" id="button-auto_locate"  onclick="getLocation()">Enable Location</button>
+                    <div id="location"></div>
+                    
+                    <br>
+                    <div class="subtext" id="address"></div>
+                    <div class="subtext" id="longitude"></div>
+                    <div class="subtext" id="latitude"></div>
+                    <br>
+
+                    <input name="price" type="number" class="form-control" id="price" placeholder="Price" style="height: 8%;">
+                    <br>
+                    Upload images<input type="file" class="btn btn-sub" id="spaceImage" name="spaceImage" accept="image/png, image/jpeg" placeholder="Upload image">
+                        <br>
+                        <button type="button" class="btn btn-sub" id="addRoommates">Add Roommates</button>
+                        <button type="button" class="btn btn-sub" id="button-upload_space_image">Upload Image</button>
+
+                    <div id="space_roommates">
+                    </div>
+
+
+                    <button id="button-submit_space" class="btn btn-primary tm-btn-search" onclick="submitSpace()">Submit</button>
+
+                    
+                </div>
+                
+                <!-- REGISTER SPACE SCRIPT -->
+                <script>
+                    function asd() {
+                        console.log(amw)
+                    }
+                    function submitSpace(){
+                        console.log("asd")
+                        coords  = document.querySelector("#latitude").innerHTML +"," +document.querySelector("#longitude").innerHTML
+                        address = document.querySelector("#address").innerHTML
+                        price = document.querySelector("#price").value
+                        Roommates = []
+
+                        // a = document.querySelector("#space_roommates").childNodes
+                        // b = a[1].querySelectorAll("span")
+                        
+                        roommate_entries = document.querySelector("#space_roommates").childNodes
+
+                        for (let index = 1; index < roommate_entries.length; index++) {
+                            input_value = roommate_entries[index].querySelectorAll("span")
+                            Roommates.push([input_value[0].innerHTML, input_value[1].innerHTML, input_value[2].innerHTML]) // input_value[0] is FirstName, input_value[1] is FamilyName, input_value[2] is ContactNumber
+                        }
+
+                        console.log(Roommates)
+
+                        $.ajax({
+                            url: "{% url 'gildo:main_view' %}",
+                            type: "post",
+                            headers: {
+                                'X-CSRFToken':'{{csrf_token}}',
+                            },
+                            data: JSON.stringify({
+                                "ajaxAction": "SpaceRegister",
+                                "firstname": "{{user.fistname}}",
+                                "lastname": "{{user.lastname}}",
+                                "Coordinates": coords,
+                                "Address":address,
+                                "Price":price,
+                                "Roommates": Roommates
+                            }),
+                            success: function (response) {
+                                alert("Space Submitted")
+                            },
+                            error: function(jqXHR, textStatus, errorThrown) {
+                                alert("Registration Failed", errorThrown);
+                            }
+                        });
+                    }
+
+                    $(document).ready(function(){
+                    $("#addRoommates").click(function(){
+                        $("#myModal").modal();
+                    });
+                    });
+                    
+                    function addRoommates(){
+                        firstname  = document.querySelector("#firstname").value
+                        lastname = document.querySelector("#lastname").value
+                        contactnumber = document.querySelector("#contactnumber").value
+                        // $.ajax({
+                        //     url: "{% url 'gildo:main_view' %}",
+                        //     type: "post",
+                        //     headers: {
+                        //         'X-CSRFToken':'{{csrf_token}}',
+                        //     },
+                        //     data: JSON.stringify({
+                        //         "ajaxAction": "AddRoommate",
+                        //         "firstname": firstname,
+                        //         "lastname": lastname,
+                        //         "contactnumber": contactnumber,
+                        //     }),
+                        //     success: function (response) {
+                        //         alert("Roommate Added")
+                        //     },
+                        //     error: function(jqXHR, textStatus, errorThrown) {
+                        //         alert("Registration Failed", errorThrown);
+                        //     }
+                        // });
+
+                        // roomate_firstname_container = document.createElement("p").innerHTML = firstname;
+                        // roomate_lastname_container = document.createElement("p") = lastname;
+                        // roomate_contactnumber_container = document.createElement("p") = contactnumber;
+
+                        
+                        space_roomate_container = document.createElement("div");
+                        space_roomate_container.innerHTML = "<span>" +firstname +"</span> <span>" +lastname +"</span> (<span>"+contactnumber +"</span>)"
+
+                        // space_roomate_container.innerHTML = "<div><p>""</p></div>"
+
+                        // space_roomate_container.appendChild(roomate_firstname_container)
+                        // space_roomate_container.appendChild(roomate_lastname_container)
+                        // space_roomate_container.appendChild(roomate_contactnumber_container)
+
+                        
+
+                        document.querySelector("#space_roommates").appendChild(space_roomate_container)
+                    }
+
+                    
+
+                    
+                </script>
+                
+                
+                {% endif %}
 
                 <!-- NEARBY LIST BLOCK -->
                 <div class="map-sidepanel-right">
