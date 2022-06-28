@@ -84,14 +84,24 @@ map.on('click', function(e) { // DISPLAY LOCATION ON CLICK
   if (user_locate.isLocating) {
     geocoder.reverse(e.latlng, map.options.crs.scale(map.getZoom()), function(results) {
       result = results[0]; // THE "result" VARIABLE IS A geocode OBJECT
-      addPopupFromResult(map, e.latlng, result)
+      // addPopupFromResult(map, e.latlng, result)
       
       user_locate.location = e.latlng
       user_locate.address = result.name
-      toggleMapLocate()
+            
+      if (user_locate.location == e.latlng && user_locate.address == result.name) {
+        addPopupFromResult(map, e.latlng, result)
+        console.log(geolocate_marker.getLatLng())
+      }
+      else {
+        // alert("Something went wrong! Please try again")
+        console.log(user_locate.location == e.latlng)
+        console.log(user_locate.address == result.name)
+      }
       
-      console.log(geolocate_marker.getLatLng())
     });
+    
+    toggleMapLocate()
   }
 });
 
@@ -101,10 +111,18 @@ function showLocation(position) {
   map.setView(position, 15)
   geocoder.reverse(position, map.options.crs.scale(map.getZoom()), function(results) {
     result = results[0]; // THE "result" VARIABLE IS A geocode OBJECT
-    addPopupFromResult(map, position, result, "You are here: <br>")
 
     user_locate.location = position
     user_locate.address = result.name
+
+    if (user_locate.location == position && user_locate.address == result.name) {
+      addPopupFromResult(map, position, result, "You are here: <br>")
+    }
+    else {
+      alert("Something went wrong! Please try again")
+      console.log(user_locate.location == position)
+      console.log(user_locate.location == position)
+    }
 
     console.log(geolocate_marker.getLatLng())
   });

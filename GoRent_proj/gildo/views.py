@@ -1,6 +1,7 @@
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
+from django.forms.models import model_to_dict
 from django.views.generic import View
 
 #from .forms import *
@@ -25,6 +26,7 @@ class GoRentMainView(View):
 	user_password = None
 
 	def get(self, request):
+		spaces = Space.objects.all()
 		if "user_email" in request.session: # IF ACCESSED THROUGH
 			self.user_type = request.session["user_type"]
 			self.user_email = request.session["user_email"]
@@ -53,7 +55,7 @@ class GoRentMainView(View):
 				
 				return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type, "sharee":sharee})
 		
-		return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type})
+		return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type, "spaces": spaces})
 		
 	def post(self, request):
 		if request.method == 'POST':
@@ -63,12 +65,20 @@ class GoRentMainView(View):
 				print(request)
 
 				if request["ajaxAction"] == "addressValidation":
-					isValid = GoRentMapSearch.isAdressValid(request["address"])
+					isValid = GoRentMapSearch.isAdressValid(request["addressInput"])
+					print("sending")
 					return JsonResponse({'isValid':isValid})
 
-				elif request["ajaxAction"] == "addressValidation":
-					isValid = GoRentMapSearch.isCoordinatesValid(request["coord"])
+				elif request["ajaxAction"] == "coordinatesValidation":
+					isValid = GoRentMapSearch.isCoordinatesValid(request["coordsInput"])
 					return JsonResponse({'isValid':isValid})
+					
+				elif request["ajaxAction"] == "getSpaceInformation":
+					spaceObjects = Space.objects.filter(id = request["spaceId"])
+					spaceObject = model_to_dict(spaceObjects[0])
+					spaceObject["contactNumber"] = spaceObjects[0].owner.contactnumber
+					print(spaceObject)
+					return JsonResponse({'space':spaceObject})
 
 				elif request["ajaxAction"] == "getNearbySpaces":
 					user_coord = [request["latitude"],["longitude"]]
@@ -78,13 +88,11 @@ class GoRentMainView(View):
 					print(nearby_spaces)
 					return JsonResponse({'nearby_spaces':nearby_spaces})
 				elif request["ajaxAction"] == "renteeApplicationSubmition":
-					print("duka")
 					print(request["owner"])
 					print(request["email"])
 					return JsonResponse({})
 					# save RentOwnerRenteeRequest data
 			else:
-				print("qwjhekjhasd")
 				if 'btnAccept' in request.POST:
 					print("accept button clicked")
 					eid = request.POST.get("email-id")

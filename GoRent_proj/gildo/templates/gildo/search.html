@@ -142,22 +142,118 @@
                         recentlyClickedSpaceId = -1;
                         // ADD MARKER SAMPLE CODE
                         markers = [
-                            L.marker([10.3157, 123.8854],{
-                                title: 'someSpaceId',
+                            {% for space in spaces %}
+                            L.marker([{{space.coordinates}}],{
+                                title: '{{space.id}}',
                             }).on('click', doSomething),
-                            L.marker([10.30, 123.700]),
+                            {% endfor %}
+
+                            // L.marker([10.30, 123.700]),
                         ]
                         
                         function doSomething(e){
                             console.log("tambis")
-                            recentlyClickedSpaceId = e.target.title
+                            recentlyClickedSpaceId = e.target.options["title"]
                             console.log(e.target.options["title"])
+
+                            var contentContainer = document.createElement("div");
+                            $.ajax({
+                                    url: "{% url 'gildo:main_view' %}",
+                                    type: "post",
+                                    headers: {
+                                    'X-CSRFToken':'{{csrf_token}}',
+                                    },
+                                    data: JSON.stringify({"ajaxAction": "getSpaceInformation", "spaceId": recentlyClickedSpaceId}),
+                                    
+                                success: function (response) {
+                                    console.log('funky')
+                                    console.log(response)// You will get response from your PHP page (what you echo or print)
+                                    //console.log(response[0])
+                                    console.log(response["space"])
+                                    
+                                    // contentContainer.className = "container-nearby_list_items"
+                                    
+                                    spaceName = document.createElement("div")
+                                    spaceName.innerHTML = "<b>"+response["space"]["name"]+"</b>"
+                                    contentContainer.appendChild(spaceName)
+                                    
+                                    ownerEmailContainer = document.createElement("div")
+                                    ownerEmailContainer.innerHTML = "Contact: " +response["space"]["owner"] +" | " +response["space"]["contactNumber"]
+                                    contentContainer.appendChild(ownerEmailContainer)
+
+                                    ownerNumberContainer = document.createElement("div")
+                                    ownerNumberContainer.innerHTML = "Address: " +response["space"]["address"]
+                                    contentContainer.appendChild(ownerNumberContainer)
+
+                                    spacePriceContainer = document.createElement("div")
+                                    spacePriceContainer.innerHTML = "Monthly: Php" +response["space"]["price"]
+                                    contentContainer.appendChild(spacePriceContainer)
+                                    
+                                  
+                                },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                    console.log(textStatus, errorThrown);
+                                    contentContainer.innerHTML = "<center>Something went wrong. Please try again.</center>"
+                                    }
+                                });
+
+
+                            L.popup({"minWidth": 250})
+                            .setLatLng(e.latlng)
+                            .setContent(contentContainer)
+                            .openOn(map);
+
                         }
 
                         user_flag = {% if user is None %} false {% else %} true {% endif %};
                         user_locate = {
                             isLocating: false, // BECOMES TRUE IF USER IS MANUALLY LOCATING 
                             location: null,
+                            // locationListener: function (val) { // A MAKESHIFT LISTENER WHEN address PROPERTY IS CHANGED
+                            //     if (user_flag)
+                            //         fillSpaceInfo() // USED WHEN LOGGED IN
+                            //     else
+                            //         activateNearbyList() // USED WHEN RENTEE
+                            // },
+                            set location(val) { // OVERIDING SETTER (I.E. user_locate.address = [some_value] EVENT)
+                                // this._location = val // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                                console.log("nimal")
+                                parentObject = this
+                                $.when( $.ajax({
+                                    url: "{% url 'gildo:main_view' %}",
+                                    type: "post",
+                                    async: false,
+                                    headers: {
+                                    'X-CSRFToken':'{{csrf_token}}',
+                                    },
+                                    data: JSON.stringify({"ajaxAction": "coordinatesValidation", "coordsInput": val.lat+","+val.lng}),
+                                    success: function (response) {
+                                    if (response["isValid"]){
+                                        console.log("Coordinates valid");
+                                    }
+                                    else{
+                                        console.log("Invalid Coordinates");
+                                    }
+                                    console.log(val);
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                        console.log("Something went wrong", textStatus, errorThrown);
+                                    }
+                                })).then(function( response, textStatus, jqXHR ) {
+                                        console.log("wew",response)
+                                        if (response["isValid"])
+                                            parentObject._location = val // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                                        else
+                                            alert("Invalid Coordinates")
+                                });
+                                // if (checkCoordsAjax(val)){
+                                //     this._location = val // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                                // }
+                            },
+                            get location() { // OVERIDING GETTER (I.E. console.log(user_locate.address) EVENT)
+                                return this._location // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                            },
+
                             address: null, // L.Control.Geocoder FROM: https://github.com/perliedman/leaflet-control-geocoder/tree/1.13.0#lcontrolgeocoder IS ASYCNHRONOUS THUS WHY WE NEED TO UPDATE AFTER user_locate.address IS UPDATED
                             addressListener: function (val) { // A MAKESHIFT LISTENER WHEN address PROPERTY IS CHANGED
                                 if (user_flag)
@@ -166,8 +262,44 @@
                                     activateNearbyList() // USED WHEN RENTEE
                             },
                             set address(val) { // OVERIDING SETTER (I.E. user_locate.address = [some_value] EVENT)
-                                this._address = val // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
-                                this.addressListener(val);
+                                console.log("qwenimal")
+                                // this._address = val // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                                // this.addressListener(val);
+                                parentObject = this
+                                $.when( $.ajax({
+                                    url: "{% url 'gildo:main_view' %}",
+                                    type: "post",
+                                    async: false,
+                                    headers: {
+                                    'X-CSRFToken':'{{csrf_token}}',
+                                    },
+                                    data: JSON.stringify({"ajaxAction": "addressValidation", "addressInput": val}),
+                                    success: function (response) {
+                                    if (response["isValid"]){
+                                        console.log("Address valid");
+                                        console.log(val);
+                                    }
+                                    else{
+                                        console.log("Invalid Address");
+                                        console.log(val);}
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                        console.log("Something went wrong", textStatus, errorThrown);
+                                    }
+                                })).then(function( response, textStatus, jqXHR ) {
+                                        console.log("wew",response)
+                                        if (response["isValid"]){
+                                            parentObject._address = val // then returnUNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                                            parentObject.addressListener(val);
+                                        }
+                                        else
+                                            alert("Please pick within Central Visayas")
+                                });
+                                // if (checkAddressAjax(val)){
+                                //     this._address = val // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
+                                //     this.addressListener(val);
+                                // }
+
                             },
                             get address() { // OVERIDING GETTER (I.E. console.log(user_locate.address) EVENT)
                                 return this._address // THE UNDERSCORE/"_" AFTER THE address IS VERY VITAL TO AVOID RECURSSION
@@ -190,7 +322,7 @@
 
                         function getLocation() {
                             if (navigator.geolocation) { // CHECKS IF GEOLOCATION IS SUPPORTED IN THE BROWSER
-                                navigator.geolocation.getCurrentPosition(showLocation);
+                                navigator.geolocation.getCurrentPosition(showLocation); // getCurrentPosition() sends coordinates values to the function showLocation()
                             } else {
                                 document.querySelector("#location").innerHTML = "Geolocation is not supported by this browser. Manully pick location instead";
                                 document.querySelector("#button-auto_locate").style.display = "none"
@@ -208,7 +340,7 @@
                                     'X-CSRFToken':'{{csrf_token}}',
                                     
                                     },
-                                    data: JSON.stringify({"latitude": user_locate.location.lat, "longitude": user_locate.location.lng}),
+                                    data: JSON.stringify({"ajaxAction": "getNearbySpaces", "latitude": user_locate.location.lat, "longitude": user_locate.location.lng}),
                                     
                                 success: function (response) {
                                     console.log('asd123')
@@ -296,6 +428,65 @@
                                 loading_screen.style.display = "none"
                                 document.querySelector("#container-nearby_list").style.display = "block"
                             }
+                        }
+
+                        function checkAddressAjax(input) {
+                            flag = false
+                            $.ajax({
+                                    url: "{% url 'gildo:main_view' %}",
+                                    type: "post",
+                                    async: false,
+                                    headers: {
+                                    'X-CSRFToken':'{{csrf_token}}',
+                                    },
+                                    data: JSON.stringify({"ajaxAction": "addressValidation", "addressInput": input}),
+                                    success: function (response) {
+                                    if (response["isValid"]){
+                                        console.log("Address valid");
+                                        console.log(input);
+                                        return true
+                                    }
+                                    else{
+                                        console.log("Invalid Address");
+                                        console.log(input);}
+                                        return false
+                                    },
+                                    error: function(jqXHR, textStatus, errorThrown) {
+                                        console.log("Something went wrong", textStatus, errorThrown);
+                                        return false
+                                    }
+                                });
+                            // return flag
+                        }
+
+                        
+                        function checkCoordsAjax(input) {
+                            flag = false
+                            $.ajax({
+                                url: "{% url 'gildo:main_view' %}",
+                                type: "post",
+                                async: false,
+                                headers: {
+                                'X-CSRFToken':'{{csrf_token}}',
+                                },
+                                data: JSON.stringify({"ajaxAction": "coordinatesValidation", "coordsInput": input.lat+","+input.lng}),
+                                success: function (response) {
+                                if (response["isValid"]){
+                                    console.log("Coordinates valid");
+                                    return true
+                                }
+                                else{
+                                    console.log("Invalid Coordinates");
+                                    console.log(input);
+                                    return false
+                                }
+                                },
+                                error: function(jqXHR, textStatus, errorThrown) {
+                                    console.log("Something went wrong", textStatus, errorThrown);
+                                    return false
+                                }
+                            });
+                            // return flag
                         }
 
                     </script>

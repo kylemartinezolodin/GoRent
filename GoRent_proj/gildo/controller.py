@@ -8,7 +8,7 @@ class GoRentMapSearch():
 
     @staticmethod
     def isAdressValid(address):
-        return bool(re.search("^\w*\d*\.*\,*$", address))
+        return bool(re.search("^(((\w|\d|-)+\.?)(\s|\,\s))*Central Visayas(\d*, )+Philippines*$", address))
     
     @staticmethod
     def isCoordinatesValid(coords):
@@ -33,8 +33,6 @@ class GoRentNearbySpace():
 
 	def getAllSpaces(self):
 		self.spaces_list = Space.objects.all()
-		print("boomboom")
-		print(self.spaces_list)
 		return(self.spaces_list)
 	
 	def rankSpaces(self):
@@ -43,8 +41,6 @@ class GoRentNearbySpace():
 		for space in self.spaces_list:
 			# space = SpaceObjectToDict(space).data # convert from python primitive object to 
 			delimeterIndex = space.coordinates.find(",") #VERY URGETNT ISSUE IF comma(,) IS NOT FOUND IN THE COORDINATES IT WILL APPEND THE LAST WITH comma(,) ENTRY. U CAN FIX IT BY DESIGNATING ACTUAL LAT,LONG INFORMATION -kyle 
-			print(space.coordinates)
-			print("yuuuuhhh")
 			latitude = float(space.coordinates[0:delimeterIndex])
 			longitude = float(space.coordinates[delimeterIndex+1:])
 			space_coord = [latitude,longitude]
@@ -65,15 +61,11 @@ class GoRentNearbySpace():
 				'price': space.price
 			}
 			
-			print("skrrt")
-			print(space)
 
 			count = len(self.nearby_list)
 			if count==0:
-				print("oof")
 				self.nearby_list.append({"space":space_object_dict, "distance":distance})
 			else:
-				print("oof2")
 				i = 0
 				while i != count:
 					if distance < self.nearby_list[i]["distance"]:
@@ -90,7 +82,6 @@ class GoRentNearbySpace():
 				# 		print("oof3")
 				# 		self.nearby_list.insert(count, {"space":space_object_dict, "distance":distance})
 				# 	count = count - 1
-			print("yawa")
 			print(self.nearby_list)
 
 		return self.nearby_list # returns list type
