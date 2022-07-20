@@ -57,6 +57,7 @@ class GoRentNearbySpace():
 					'lastname': space.owner.lastname,
 					'contactnumber': space.owner.contactnumber
 				},
+				'name': space.name,
 				'address': space.address,
 				'price': space.price
 			}

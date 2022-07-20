@@ -2,6 +2,41 @@
 {%load static%}
 <html lang="en">
 <head>
+<style>
+    .container-nearby_list{
+        background-color: lightblue;
+        font-size: 16px;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    .myDiv  {
+        background-color: lightblue;
+        font-size: 16px;
+        font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    .button {
+        background-color: #4CAF50; /* Green */
+        border: none;
+        color: white;
+        padding: 12px 24px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        margin: 2px 1px;
+        transition-duration: 0.4s;
+        cursor: pointer;
+    }
+    .button1 {
+        background-color: #008CBA;
+        color: black; 
+        border: 2px solid #008CBA;
+        border-radius: 8px;
+    }
+    .button1:hover {
+        background-color: white;
+        color: white;
+    }   
+</style>
     <link rel = "icon" href = "{% static 'gildo/img/gorent_icon.png' %}" type = "image/png"> 
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -358,15 +393,15 @@
                                     temp.className = "container-nearby_list_items"
                                     
                                     temp2 = document.createElement("div")
-                                    temp2.innerHTML = nearby_spaces[i]["space"]["owner"]["email"]
+                                    temp2.innerHTML = "Name: " + nearby_spaces[i]["space"]["name"]
                                     temp.appendChild(temp2)
 
                                     temp3 = document.createElement("div")
-                                    temp3.innerHTML = nearby_spaces[i]["space"]["owner"]["contactnumber"]
+                                    temp3.innerHTML = "Contact Info: " + nearby_spaces[i]["space"]["owner"]["contactnumber"]
                                     temp.appendChild(temp3)
 
                                     temp4 = document.createElement("div")
-                                    temp4.innerHTML = nearby_spaces[i]["space"]["price"]
+                                    temp4.innerHTML = "Price: " + nearby_spaces[i]["space"]["price"]
                                     temp.appendChild(temp4)
 
                                     temp5 = document.createElement("div")
@@ -386,6 +421,8 @@
                                     // temp.appendChild(tempButton)
                                     
                                     document.getElementById("container-nearby_list").appendChild(temp);
+                                    
+                                    reduceNearbySpaces()
                                     }
                                     
                                   
@@ -398,6 +435,33 @@
                             document.querySelector("#button-manual_locate").innerHTML = "Pick Another Location"
                             document.querySelector("#button-auto_locate").style.display = "none"
                             document.querySelector("#container-nearby_list").style.display = "block"
+                        }
+
+                        function reduceNearbySpaces() {
+                            console.log("awoooooooooooooooooooooooooooooooo")
+                            nearbySpaceElement = document.querySelector("#container-nearby_list")
+                            nearbySpaceList = nearbySpaceElement.children
+
+                                console.log(nearbySpaceList.length)
+                            for (let i = 0; i < nearbySpaceList.length; i++) {
+                                space = nearbySpaceList[i];
+                                
+                                spaceHaveMarker = false
+                                for (let j = 0; j < markers.length; j++) {
+                                    marker = markers[j];
+                                    
+                                    console.log(marker.options["title"], "nimal")
+                                    
+                                    console.log(space.children[3].innerHTML, "nimal2")
+                                    if(space.children[3].innerHTML === marker.options["title"]){
+                                        spaceHaveMarker = true
+                                        break;
+                                    }
+                                }
+                                
+                                if (!spaceHaveMarker)
+                                    nearbySpaceElement.removeChild(nearbySpaceElement.children[i])
+                            }
                         }
 
                         function dali(ez) {
@@ -729,8 +793,8 @@
                                 <p>Email: {{item.email}} </p>
                                 <p>Contact: {{item.contactnumber}} </p>
                             </div>
-                            <button name="email-id" value={{email.id}} type="submit" id="btnAccept" class="btn btn-primary" data-target="{{email.id}}">Accept</button>
-                            <button name="email-id" value={{email.id}} type="submit" id="btnDelete" class="btn btn-primary" data-target="{{email.id}}">Delete</button>
+                            <button name="email-id" value={{email.id}} type="submit" id="btnAccept" class="btn btn-primary">Accept</button>
+                            <button name="email-id" value={{email.id}} type="submit" id="btnDelete" class="btn btn-primary">Decline</button>
                             <br>
                         </div>
                     </div>
@@ -740,23 +804,26 @@
                 <!-- REQUEST LIST BLOCK FOR SHAREE -->
                 
                 <div class="map-sidepanel-right">
-                    Request List:
-                    <br>
+                    <div class="myDiv"> <h4>Request List:</h4></div>
                     {% for item in sharee %}
-                    <div id="container-request_list" class="container-request_list">
-                        <div class="bg-light">
-                            <div class="bg-light">
-                                <p>Firstname: {{item.firstname}} </p>
-                                <p>Lastname: {{item.lastname}} </p>
-                                <p>Email: {{item.email}} </p>
-                                <p>Contact: {{item.contactnumber}} </p>
-                            </div>
-                            <button name="email-id" value={{email.id}} type="submit" id="btnAccept" class="btn btn-primary" data-target="{{email.id}}">Accept</button>
-                            <button name="email-id" value={{email.id}} type="submit" id="btnDelete" class="btn btn-primary" data-target="{{email.id}}">Delete</button>
-                            <br>
+                    <form id = "form1" action="" method="POST" autocomplete="off" enctype="multipart/form-data">
+                    {% csrf_token %}
+                        <div class="myDiv">
+                                <div>First Name: {{item.firstname}} </div>
+                                <div>Last Name: {{item.lastname}} </div>
+                                <div>Email: {{item.email}} </div>
+                                <div>Contact Number: {{item.contactnumber}} </div>
+                         <div id="container-request_list" class="container-request_list">
+                                <input type="text" name="email-id" value = {{item.email}} hidden>
+                                <center>
+                                <button class="button button1" name="btnAccept" type="submit" id="btnAccept" class="btn btn-primary">Accept</button>
+                                <button class="button button1" name="btnDelete" type="submit" id="btnDelete" class="btn btn-primary">Delete</button>
+                                </center>
                         </div>
-                    </div>
-                    {% endfor%}
+                        </div>
+                    </form>
+                    <br>
+                    {% endfor %}
                 </div>
 
                 {% endif %}

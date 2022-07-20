@@ -71,6 +71,38 @@ geosearch_control.on('markgeocode', function(e) { // BOUNDING-BOX
     ]).addTo(map);
     map.fitBounds(search_boundingbox.getBounds());
   }
+  // REMOVE MARKERS OUTSIDE SEARCH BOUNDING BOX
+  const marker1 = markers.slice() // JS duplication
+  marker1.forEach(marker => {
+    if(!bbox.contains(marker.getLatLng())){
+      marker.remove() // remove from map
+
+      index = markers.indexOf(marker) // remove from array 
+      markers.splice(index, 1)
+    }
+  });
+  
+  
+  // console.log("awoooooooooooooooooooooooooooooooo")
+  // nearbySpaceList = document.querySelector("#container-nearby_list").children
+  // markers.forEach(marker => {
+  //   console.log(marker.options["title"], "nimal")
+
+  //   console.log(nearbySpaceList.length)
+  //   for (let index = 0; index < nearbySpaceList.length; index++) {
+  //     space = nearbySpaceList[index];
+
+  //     console.log(space.children[3].innerHTML, "nimal2")
+  //     if(space.children[3].innerHTML === marker.options["title"])
+  //       document.querySelector("#container-nearby_list").removeChild(document.querySelector("#container-nearby_list").children[index])
+  //   }
+
+  //   // nearbySpaceList.forEach(space => {
+  //   //   console.log(space.children[3].innerHTML, "nimal2")
+  //   //   if(space.children[3].innerHTML === marker.options["title"])
+  //   //     document.querySelector("#container-nearby_list").removeChild(nearbySpaceList[index])
+  //   //   });
+  // });
 
   console.log(e);
   if (user_flag == false) {
@@ -144,7 +176,6 @@ function addPopupFromResult(map, latlng, result="", message="") { // DISPLAY LOC
     }
   }
 }
-
 
 
 

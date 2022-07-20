@@ -1,3 +1,4 @@
+import email
 from django.http import Http404
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, JsonResponse
@@ -52,7 +53,7 @@ class GoRentMainView(View):
 					self.user_object = self.user_object[0] # EXTRAC RENTOWNER OBJECT FROM LIST
 					print("User object: " +str(self.user_object))
 				sharee = ShareeRenteeRequest.objects.all()
-				
+				# print("sharee" +sharee[0])
 				return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type, "sharee":sharee})
 		
 		return render(request, 'gildo/search.html', context={"user":self.user_object, "type":self.user_type, "spaces": spaces})
@@ -96,16 +97,14 @@ class GoRentMainView(View):
 				if 'btnAccept' in request.POST:
 					print("accept button clicked")
 					eid = request.POST.get("email-id")
-					# em = Sharee.objects.filter(email_ptr_id=eid).delete()
-					# perss = ShareeRenteeRequest.objects.filter(id = eid).delete()
+					ShareeRenteeRequest.objects.filter(email = eid).delete()
 					print('record deleted')
 					return redirect('gildo:main_view')
 
 				elif 'btnDelete' in request.POST:
 					print("delete button clicked")
 					eid = request.POST.get("email-id")
-					# em = Sharee.objects.filter(email_ptr_id=eid).delete()
-					# pers = ShareeRenteeRequest.objects.filter(id = eid).delete()
+					ShareeRenteeRequest.objects.filter(email = eid).delete()
 					print('record deleted')
 					return redirect('gildo:main_view')
 
